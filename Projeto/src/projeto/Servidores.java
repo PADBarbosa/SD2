@@ -39,11 +39,7 @@ public class Servidores {
         this.leilao = new ArrayList<>();
         this.vazios = new ArrayList<>();
     }
-    
-    
 
-
-    
     public int reservaPedido(String nome) {
         l.lock();
         Servidor s;
@@ -101,7 +97,8 @@ public class Servidores {
             l.unlock();          
         }    
     }
-     public void libertaLeilao(int id) {
+    
+    public void libertaLeilao(int id) {
         l.lock();
         Servidor s = this.servidores.get(id);
         s.liberta();
@@ -109,16 +106,5 @@ public class Servidores {
         this.vazios.add(id);
         this.c.signalAll();
         l.unlock();   
-    }
-     
-     public float valorPagar(int id) {
-        l.lock();
-        Servidor s = this.servidores.get(id);
-        LocalDateTime LocalDateTime = s.getDataInicio();
-        float precoFixo = s.getPrecoFixo();
-        
-        
-              
-     }
-       
+    }     
 }

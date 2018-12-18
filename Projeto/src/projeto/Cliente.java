@@ -5,9 +5,12 @@
  */
 package projeto;
 
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -19,20 +22,16 @@ public class Cliente {
     String password;
     float valorDivida;
     LocalDate dataRegisto;
-    List<Reserva> reservas;
+    Map<Integer, Reserva> reservas;
 
-    public Cliente(String nome, String email, String password, float valorDivida, LocalDate dataRegisto) {
+    public Cliente(String nome, String email, String password, float valorDivida, LocalDate dataRegisto, Map<Integer, Reserva> reservas) {
         this.nome = nome;
         this.email = email;
         this.password = password;
         this.valorDivida = valorDivida;
         this.dataRegisto = dataRegisto;
-        this.reservas = new ArrayList<>();
+        this.reservas = reservas;
     }
-
-    public void adicionaReserva; 
-    
-    
     
     public String getNome() {
         return nome;
@@ -52,6 +51,10 @@ public class Cliente {
 
     public LocalDate getDataRegisto() {
         return dataRegisto;
+    }
+
+    public Map<Integer, Reserva> getReservas() {
+        return reservas;
     }
 
     public void setNome(String nome) {
@@ -77,6 +80,25 @@ public class Cliente {
     public void setDataRegisto(LocalDate dataRegisto) {
         this.dataRegisto = dataRegisto;
     }
+
+    public void setReservas(Map<Integer, Reserva> reservas) {
+        this.reservas = reservas;
+    }
     
+    public void adicionaReserva(int id, LocalDateTime dataReserva, String tipo){
+        float taxa = Tipos.getPreco(tipo);
+        Reserva r = new Reserva(id, taxa, dataReserva, tipo);
+        this.reservas.put(id, r);
+    }
+    
+    public float valorPagar(int id) {
+        Reserva r = reservas.get(id);
+        LocalDateTime inicio = r.getDataReserva();
+        LocalDateTime atual = LocalDateTime.now();
+        Duration duracao = Duration.between(inicio, atual);
+        long segundos = duracao.getSeconds();
+        float taxa = r.getTaxa();
+        return (segundos * taxa);
+    }
     
 }

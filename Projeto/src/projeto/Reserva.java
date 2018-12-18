@@ -16,11 +16,13 @@ public class Reserva {
     int id;
     float taxa;
     LocalDateTime dataReserva;
+    String tipo;
 
-    public Reserva(int id, float taxa, LocalDateTime dataReserva) {
+    public Reserva(int id, float taxa, LocalDateTime dataReserva, String tipo) {
         this.id = id;
         this.taxa = taxa;
         this.dataReserva = dataReserva;
+        this.tipo = tipo;
     }
 
     public int getId() {
@@ -35,6 +37,10 @@ public class Reserva {
         return dataReserva;
     }
 
+    public String getTipo() {
+        return tipo;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -46,7 +52,8 @@ public class Reserva {
     public void setDataReserva(LocalDateTime dataReserva) {
         this.dataReserva = dataReserva;
     }
-    
-    
-    
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
 }
