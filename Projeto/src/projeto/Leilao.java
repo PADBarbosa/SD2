@@ -20,7 +20,7 @@ public class Leilao {
    // lista de licitacoes para servidores pequenos
             
     
-    public String ganhaLicitacaoGrande(List<Licitacao> licitacoes){
+    public String ganhaLicitacao(List<Licitacao> licitacoes){
         String res = new String();
         float v = 0;
         for(Licitacao l : licitacoes){
