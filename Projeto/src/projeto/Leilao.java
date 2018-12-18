@@ -12,13 +12,42 @@ import java.util.List;
  * @author Barbosa
  */
 public class Leilao {
-    private List<Cliente> licitacoesGrandes;
-    private List<Cliente> licitacoesMedios;
-    private List<Cliente> licitacoesPequenos;
+    private List<Licitacao> licitacoesGrandes;
+    private List<Licitacao> licitacoesMedios;
+    private List<Licitacao> licitacoesPequenos;
    // lista de licitacoes para servidores grandes 
    // lista de licitacoes para servidores medios
    // lista de licitacoes para servidores pequenos
-            
+
+    public Leilao(List<Licitacao> licitacoesGrandes, List<Licitacao> licitacoesMedios, List<Licitacao> licitacoesPequenos) {
+        this.licitacoesGrandes = licitacoesGrandes;
+        this.licitacoesMedios = licitacoesMedios;
+        this.licitacoesPequenos = licitacoesPequenos;
+    }
+
+    public List<Licitacao> getLicitacoesGrandes() {
+        return licitacoesGrandes;
+    }
+
+    public List<Licitacao> getLicitacoesMedios() {
+        return licitacoesMedios;
+    }
+
+    public List<Licitacao> getLicitacoesPequenos() {
+        return licitacoesPequenos;
+    }
+
+    public void setLicitacoesGrandes(List<Licitacao> licitacoesGrandes) {
+        this.licitacoesGrandes = licitacoesGrandes;
+    }
+
+    public void setLicitacoesMedios(List<Licitacao> licitacoesMedios) {
+        this.licitacoesMedios = licitacoesMedios;
+    }
+
+    public void setLicitacoesPequenos(List<Licitacao> licitacoesPequenos) {
+        this.licitacoesPequenos = licitacoesPequenos;
+    }
     
     public String ganhaLicitacao(List<Licitacao> licitacoes){
         String res = new String();
