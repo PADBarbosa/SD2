@@ -42,38 +42,26 @@ public class Servidores {
     public int reservaPedido(String nome) {
         
         l.lock();
-        Servidor s;
         try {
-                 
+            Servidor s;     
             while (this.vazios.isEmpty() && this.leilao.isEmpty()) {
                 c.await();
             }
             
             if (!this.vazios.isEmpty()) {
-                s = this.vazios.get(0);
-                this.vazios.remove(0);
+                this.vazios.get(0);
+            }
 
-            }
-            else { //Mudar para valor mais baixo
-                s = this.leilao.get(0);
-                this.leilao.remove(0);
-            }
             
             s.reserva(nome);
-            this.pedido.put(nome,s);
-           
-
-            
+            this.ocupados.put(nome,s);
+            this.vazios.remove(0);
+            return 1;
         }
         catch (InterruptedException ex) {
-            System.out.printf("Erro"); 
-            return -1;
-        }        
-        finally {
+            System.out.printf("Erro");
+        }        finally {
             l.unlock();
-            return s.getId();  
-            
         }
-         
     }
 }
