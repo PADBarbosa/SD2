@@ -5,67 +5,84 @@
  */
 package Projeto;
 
+import java.time.LocalDateTime;
+
 /**
  *
  * @author ze
  */
 public class Servidor {
-    private String nome;
+    private int id;
     private String tipo;
-    private float preçoFixo;
+    private float precoFixo;
     private Boolean ocupado;
-    private String ocupante;
+    private String cliente;
+    private LocalDateTime dataInicio;
     
-    public Servidor(String nome, String tipo, float preçoFixo) {
-        this.nome = nome;
+    public Servidor(int id, String tipo, float preçoFixo) {
+        this.id = id;
         this.tipo = tipo;
-        this.preçoFixo = preçoFixo;
+        this.precoFixo = preçoFixo;
         this.ocupado = false;
-        this.ocupante = "";
+        this.cliente = "";
+        this.dataInicio = null;
     }
     
-    public String getNome() {
-        return nome;
+    public int getId() {
+        return id;
     }
 
     public String getTipo() {
         return tipo;
     }
 
-    public float getPreçoFixo() {
-        return preçoFixo;
+    public float getPrecoFixo() {
+        return precoFixo;
     }
 
     public Boolean getOcupado() {
         return ocupado;
     }
 
-    public String getOcupante() {
-        return ocupante;
+    public String getCliente() {
+        return cliente;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public LocalDateTime getDataInicio() {
+        return dataInicio;
+    }
+
+    
+    
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
 
-    public void setPreçoFixo(float preçoFixo) {
-        this.preçoFixo = preçoFixo;
+    public void setPrecoFixo(float precoFixo) {
+        this.precoFixo = precoFixo;
     }
 
     public void setOcupado(Boolean ocupado) {
         this.ocupado = ocupado;
     }
 
-    public void setOcupante(String ocupante) {
-        this.ocupante = ocupante;
+    public void setCliente(String cliente) {
+        this.cliente = cliente;
     }
     
    public void reserva(String nome) {
-       this.setOcupante(nome);
+       this.setCliente(nome);
        this.setOcupado(true);
+       this.dataInicio = LocalDateTime.now();
+   }
+   
+   public void liberta() {
+       this.cliente = "";
+       this.ocupado = false;
+       
    }
 }

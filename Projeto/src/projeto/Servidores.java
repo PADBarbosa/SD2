@@ -5,6 +5,7 @@
  */
 package Projeto;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,15 +23,19 @@ import java.util.logging.Logger;
 public class Servidores {
     private Lock l = new ReentrantLock();
     Condition c = l.newCondition();
- 
-    
-    
-    private Map<String,Servidor> pedido;
-    private List<Servidor> leilao;
-    private List<Servidor> vazios;
+    // chave-> id do servidor
+    //guarda todos os servidores
+    private Map<Integer,Servidor> servidores;
+
+    //chave -> 
+    //private Map<String,Integer> pedido;
+    //ids dos servidores obtidos por leilao
+    private List<Integer> leilao;
+    //ids dos servidores vazios
+    private List<Integer> vazios;
 
     public Servidores() {
-        this.pedido = new HashMap<>();
+        this.servidores = new HashMap<>();
         this.leilao = new ArrayList<>();
         this.vazios = new ArrayList<>();
     }
@@ -40,40 +45,80 @@ public class Servidores {
 
     
     public int reservaPedido(String nome) {
-        
         l.lock();
         Servidor s;
-        try {
-                 
+        try {        
             while (this.vazios.isEmpty() && this.leilao.isEmpty()) {
                 c.await();
-            }
-            
+            }           
             if (!this.vazios.isEmpty()) {
-                s = this.vazios.get(0);
+                s = this.servidores.get(this.vazios.get(0));
                 this.vazios.remove(0);
-
             }
             else { //Mudar para valor mais baixo
-                s = this.leilao.get(0);
+                s = this.servidores.get(this.leilao.get(0));
                 this.leilao.remove(0);
             }
-            
-            s.reserva(nome);
-            this.pedido.put(nome,s);
-           
-
-            
+            s.reserva(nome);         
+            return s.getId();          
         }
         catch (InterruptedException ex) {
             System.out.printf("Erro"); 
             return -1;
         }        
         finally {
-            l.unlock();
-            return s.getId();  
-            
-        }
-         
+            l.unlock();          
+        }    
     }
+    
+    public void libertaPedido(int id) {
+        l.lock();
+        Servidor s = this.servidores.get(id);
+        s.liberta();
+        this.vazios.add(id);
+        this.c.signalAll();
+        l.unlock();   
+    }
+    
+    public int reservaLeilao(String nome) {
+        l.lock();
+        Servidor s;
+        try {        
+            while (this.vazios.isEmpty()) {
+                c.await();
+            }           
+            s = this.servidores.get(this.vazios.get(0));
+            this.vazios.remove(0);
+            s.reserva(nome);
+            this.leilao.add(s.getId());
+            return s.getId();          
+        }
+        catch (InterruptedException ex) {
+            System.out.printf("Erro"); 
+            return -1;
+        }        
+        finally {
+            l.unlock();          
+        }    
+    }
+     public void libertaLeilao(int id) {
+        l.lock();
+        Servidor s = this.servidores.get(id);
+        s.liberta();
+        this.leilao.remove(Integer.valueOf(id));
+        this.vazios.add(id);
+        this.c.signalAll();
+        l.unlock();   
+    }
+     
+     public float valorPagar(int id) {
+        l.lock();
+        Servidor s = this.servidores.get(id);
+        LocalDateTime LocalDateTime = s.getDataInicio();
+        float precoFixo = s.getPrecoFixo();
+        
+        
+              
+     }
+       
 }

@@ -6,6 +6,8 @@
 package projeto;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -17,6 +19,7 @@ public class Cliente {
     String password;
     float valorDivida;
     LocalDate dataRegisto;
+    List<Reserva> reservas;
 
     public Cliente(String nome, String email, String password, float valorDivida, LocalDate dataRegisto) {
         this.nome = nome;
@@ -24,8 +27,13 @@ public class Cliente {
         this.password = password;
         this.valorDivida = valorDivida;
         this.dataRegisto = dataRegisto;
+        this.reservas = new ArrayList<>();
     }
 
+    public void adicionaReserva; 
+    
+    
+    
     public String getNome() {
         return nome;
     }
