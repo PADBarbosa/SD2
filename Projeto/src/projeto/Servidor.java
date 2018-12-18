@@ -10,22 +10,22 @@ package Projeto;
  * @author ze
  */
 public class Servidor {
-    private int id;
+    private String nome;
     private String tipo;
     private float preçoFixo;
     private Boolean ocupado;
     private String ocupante;
     
-    public Servidor(int id, String tipo, float preçoFixo) {
-        this.id = id;
+    public Servidor(String nome, String tipo, float preçoFixo) {
+        this.nome = nome;
         this.tipo = tipo;
         this.preçoFixo = preçoFixo;
         this.ocupado = false;
         this.ocupante = "";
     }
     
-    public int getId() {
-        return id;
+    public String getNome() {
+        return nome;
     }
 
     public String getTipo() {
@@ -44,8 +44,8 @@ public class Servidor {
         return ocupante;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public void setTipo(String tipo) {
