@@ -5,6 +5,8 @@
  */
 package projeto;
 
+import java.time.LocalDate;
+
 /**
  *
  * @author Barbosa
@@ -14,12 +16,14 @@ public class Cliente {
     String email;
     String password;
     float valorDivida;
+    LocalDate dataRegisto;
 
-    public Cliente(String nome, String email, String password, float valorDivida) {
+    public Cliente(String nome, String email, String password, float valorDivida, LocalDate dataRegisto) {
         this.nome = nome;
         this.email = email;
         this.password = password;
         this.valorDivida = valorDivida;
+        this.dataRegisto = dataRegisto;
     }
 
     public String getNome() {
@@ -38,6 +42,10 @@ public class Cliente {
         return valorDivida;
     }
 
+    public LocalDate getDataRegisto() {
+        return dataRegisto;
+    }
+
     public void setNome(String nome) {
         this.nome = nome;
     }
@@ -52,6 +60,14 @@ public class Cliente {
 
     public void setValor(float valorDivida) {
         this.valorDivida = valorDivida;
+    }
+
+    public void setValorDivida(float valorDivida) {
+        this.valorDivida = valorDivida;
+    }
+
+    public void setDataRegisto(LocalDate dataRegisto) {
+        this.dataRegisto = dataRegisto;
     }
     
     
