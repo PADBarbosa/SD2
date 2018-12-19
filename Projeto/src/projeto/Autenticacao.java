@@ -19,6 +19,7 @@ public class Autenticacao {
     
     public Autenticacao() {
         this.users = new HashMap<>();
+        users.put("pad", "123");
     }
     
     public Autenticacao(Map<String, String> users) {

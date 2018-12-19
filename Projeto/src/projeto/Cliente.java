@@ -22,19 +22,14 @@ public class Cliente {
     float valorDivida;
     Map<Integer, Reserva> reservas;
 
-    public Cliente(String email, String password, float valorDivida, Map<Integer, Reserva> reservas) {
+    public Cliente(String email, float valorDivida, Map<Integer, Reserva> reservas) {
         this.email = email;
-        this.password = password;
         this.valorDivida = valorDivida;
         this.reservas = reservas;
     }
 
     public String getEmail() {
         return email;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     public float getValorDivida() {
@@ -47,10 +42,6 @@ public class Cliente {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public void setValorDivida(float valorDivida) {

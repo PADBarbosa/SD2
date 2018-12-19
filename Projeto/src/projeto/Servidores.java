@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Projeto;
+package projeto;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -39,8 +39,8 @@ public class Servidores {
         this.leilao = new ArrayList<>();
         this.vazios = new ArrayList<>();
     }
-
-    public int reservaPedido(String nome) {
+    
+    public int reservaPedido(String email) {
         l.lock();
         Servidor s;
         try {        
@@ -55,7 +55,7 @@ public class Servidores {
                 s = this.servidores.get(this.leilao.get(0));
                 this.leilao.remove(0);
             }
-            s.reserva(nome);         
+            s.reserva(email);         
             return s.getId();          
         }
         catch (InterruptedException ex) {
@@ -65,6 +65,12 @@ public class Servidores {
         finally {
             l.unlock();          
         }    
+    }
+    
+    public void adicionaServidores(int id, String tipo, Float custoHorario){
+        Servidor s = new Servidor(id, tipo, custoHorario);
+        this.servidores.put(id, s);
+        this.vazios.add(id);
     }
     
     public void libertaPedido(int id) {

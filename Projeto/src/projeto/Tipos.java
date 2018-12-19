@@ -10,13 +10,13 @@ package projeto;
  * @author Barbosa
  */
 public final class Tipos {
-    static float bigPrice = (float) 0.50;
+    static float largePrice = (float) 0.50;
     static float mediumPrice = (float) 0.30;
     static float smallPrice = (float) 0.15;
         
     public static float getPreco(String tipo){
-        if(tipo.equals("big")){
-            return bigPrice;
+        if(tipo.equals("large")){
+            return largePrice;
         }
         else if(tipo.equals("medium")){
             return mediumPrice;

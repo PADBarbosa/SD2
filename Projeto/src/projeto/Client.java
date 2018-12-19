@@ -17,6 +17,23 @@ import java.net.UnknownHostException;
  * @author ze
  */
 public class Client {
+    
+    public static void servidorPedido(PrintWriter toServer, BufferedReader keyboard) throws IOException{
+        System.out.println("Escolha o tipo de servidor");
+        System.out.println("Large");
+        System.out.println("Medium");
+        System.out.println("Small");
+        
+        String x = "";
+        x = keyboard.readLine();
+        toServer.println("0");
+        toServer.println(x);
+    }
+    
+    public static void consultaDivida(){
+        
+    }
+    
     public static void main(String args[]) throws IOException, UnknownHostException{
 		Socket cs = new Socket("127.0.0.1", 9999);
 
@@ -61,34 +78,54 @@ public class Client {
                         autenticado = true;
                     }
                 }
+
+                ServerToClient sc = new ServerToClient(fromServer);
+                Thread t = new Thread(sc);
+                t.start();
                 
                 System.out.println("0 -> Servidor a pedido");
                 System.out.println("1 -> Servidor a leilão");
                 System.out.println("2 -> Libertar servidor");
                 System.out.println("3 -> Consultar conta");
                 
+                x = keyboard.readLine();
+                if(x.equals("0")){
+                    servidorPedido(toServer, keyboard);
+                }
+                else if(x.equals("1")){
+                    
+                }
+                else if(x.equals("2")){
+                    
+                }
+                else if(x.equals("3")){
+                    
+                }
                 
-                
-                
-                
-                
-                
-		/*String current;
-		
-		while((current = sin.readLine()) != null){
-			out.println(current);
-			System.out.println(in.readLine());
-
-		}
-		System.out.println("Shutdown Output");
-		cs.shutdownOutput();
-		System.out.println("Waiting for final result");
-		System.out.println("The answer is: " + in.readLine());
-		System.out.println("Done");
-
-		in.close();
-		out.close();
-		sin.close();*/
-
+                try{
+                    t.join();
+                }catch(Exception e){
+                    System.out.println("erro no join");
+                }
 	}
+}
+
+class ServerToClient implements Runnable{
+    BufferedReader le;
+    PrintWriter escreve;
+    
+    public ServerToClient(BufferedReader in){
+        le = in;
+    }
+
+    public void run(){
+        try{
+            String message;
+            while((message = le.readLine()) != null){
+                System.out.println(message);
+            }
+            escreve.close();
+            le.close();
+	}catch(Exception e){System.out.println("Erro cliente");}
+    }
 }
