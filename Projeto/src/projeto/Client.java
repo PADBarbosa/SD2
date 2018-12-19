@@ -24,14 +24,13 @@ public class Client {
         System.out.println("Medium");
         System.out.println("Small");
         
-        String x = "";
-        x = keyboard.readLine();
+        String tipo = keyboard.readLine();
         toServer.println("0");
-        toServer.println(x);
+        toServer.println(tipo);
     }
     
-    public static void consultaDivida(){
-        
+    public static void consultaDivida(PrintWriter toServer)throws IOException{
+        toServer.println("3");
     }
     
     public static void main(String args[]) throws IOException, UnknownHostException{
@@ -99,7 +98,7 @@ public class Client {
                     
                 }
                 else if(x.equals("3")){
-                    
+                    consultaDivida(toServer);
                 }
                 
                 try{
