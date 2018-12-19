@@ -17,24 +17,16 @@ import java.util.Map;
  * @author Barbosa
  */
 public class Cliente {
-    String nome;
     String email;
     String password;
     float valorDivida;
-    LocalDate dataRegisto;
     Map<Integer, Reserva> reservas;
 
-    public Cliente(String nome, String email, String password, float valorDivida, LocalDate dataRegisto, Map<Integer, Reserva> reservas) {
-        this.nome = nome;
+    public Cliente(String email, String password, float valorDivida, Map<Integer, Reserva> reservas) {
         this.email = email;
         this.password = password;
         this.valorDivida = valorDivida;
-        this.dataRegisto = dataRegisto;
         this.reservas = reservas;
-    }
-    
-    public String getNome() {
-        return nome;
     }
 
     public String getEmail() {
@@ -49,16 +41,8 @@ public class Cliente {
         return valorDivida;
     }
 
-    public LocalDate getDataRegisto() {
-        return dataRegisto;
-    }
-
     public Map<Integer, Reserva> getReservas() {
         return reservas;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
     }
 
     public void setEmail(String email) {
@@ -69,16 +53,8 @@ public class Cliente {
         this.password = password;
     }
 
-    public void setValor(float valorDivida) {
-        this.valorDivida = valorDivida;
-    }
-
     public void setValorDivida(float valorDivida) {
         this.valorDivida = valorDivida;
-    }
-
-    public void setDataRegisto(LocalDate dataRegisto) {
-        this.dataRegisto = dataRegisto;
     }
 
     public void setReservas(Map<Integer, Reserva> reservas) {
