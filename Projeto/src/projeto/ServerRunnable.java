@@ -28,19 +28,55 @@ class ServerRunnable implements Runnable{
                     PrintWriter out = new PrintWriter(this.cs.getOutputStream(), true);
                     BufferedReader in = new BufferedReader(new InputStreamReader(this.cs.getInputStream()));
                     
-                    out.println("Escreva o seu email");
-                    String email = in.readLine();
-                    out.println("Escreva a sua password");
-                    String password = in.readLine();
+                    //criar conta ou autenticar?
+                    //0 criar
+                    //1 autenticar
                     
                     
+                    
+                    
+                    boolean autenticado = false;
+                    
+                    boolean sucesso;
+                    while(!autenticado) {
+                        String x = in.readLine();
+                        String email = in.readLine();
+                        String password = in.readLine();
+                        System.out.println(x);
+                        System.out.println(email);
+                        System.out.println(password);
+                        if(x.equals("0")) {
+                            sucesso = this.autenticacao.registaUser(email, password);
+                            if (sucesso) {
+                                out.println("Conta criada com sucesso");
+                              //  System.out.println("Conta criada com sucessoawfgsdgfh");
+                            }
+                            else {
+                                out.println("Email já registado");
+                            }
+
+                        }
+                        else if(x.equals("1")) {
+                            sucesso = this.autenticacao.verificaUser(email, password);
+                            if (sucesso) {
+                                out.println("Autenticado");
+                                autenticado = true;
+                            }
+                            else {
+                                out.println("email ou password errados");
+                            }
+                        }
+                    }
+                    
+                    
+                    
                         
                         
                         
                         
                         
                         
-                        
+                     /*   
                         
                         
                         
@@ -58,7 +94,7 @@ class ServerRunnable implements Runnable{
 			out.println("Média " + (float) total / n);
 
 			out.close();
-			cs.close();
+			cs.close();*/
 		} catch (Exception e){System.out.println("Asneira");}
 	}
 }

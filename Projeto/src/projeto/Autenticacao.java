@@ -33,22 +33,22 @@ public class Autenticacao {
         this.users = users;
     }
     
-    public void registaUser(String email, String password){
+    public boolean registaUser(String email, String password){
+        if(users.containsKey(email)){
+            return false;
+        }
         this.users.put(email, password);
+        return true;
     }
     
-    public void verificaUser(String email, String password){
+    public boolean verificaUser(String email, String password){
         if(this.users.containsKey(email)){
             if(this.users.get(email).equals(password)){
-                System.out.println("Ok");
-            }
-            else{
-                System.out.println("Erro na password");
+                return true;
             }
         }
-        else{
-            System.out.println("User inexistente");
-        }
+        return false;
+        
     }
     
 }

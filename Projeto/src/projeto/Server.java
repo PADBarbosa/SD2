@@ -18,10 +18,10 @@ import java.net.Socket;
  */
 public class Server {
     
-    private Autenticacao autenticacao;
     
     
-    public void main(String args[]) throws IOException{
+    public static void main(String args[]) throws IOException{
+                Autenticacao autenticacao;
 		ServerSocket ss = new ServerSocket(9999);
                 autenticacao = new Autenticacao();
 		while(true) {
