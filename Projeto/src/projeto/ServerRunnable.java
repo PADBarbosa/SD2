@@ -9,7 +9,10 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  *
@@ -89,12 +92,24 @@ class ServerRunnable implements Runnable{
                                 out.println("Deu merda jovem");
                             }
                             else{
+                                Cliente c = clientes.getPorEmail(email);
+                                c.adicionaReserva(res, LocalDateTime.now(), tipo);
                                 out.println("Alocado servidor número: " + res);
                             }
                         }
+                        else if(x.equals("2")){
+                            Cliente c = clientes.getPorEmail(email);
+                            List<String> reservas = c.listaIds();
+                            out.println(Integer.toString(reservas.size()));
+                            for(String s : reservas){
+                                //out.println(s);
+                            }
+                            String id = in.readLine();
+                            String tipo = in.readLine();
+                            registo.retiraServidor(tipo , Integer.parseInt(id));
+                        }
                         
                         else if(x.equals("3")){
-                            System.out.println("1");
                             Cliente c = clientes.getPorEmail(email);
                             float valorDivida = c.getValorDivida();
                             System.out.println("divida" + valorDivida);

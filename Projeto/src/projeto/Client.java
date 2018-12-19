@@ -29,9 +29,28 @@ public class Client {
         toServer.println(tipo);
     }
     
+    public static void libertaServidor(PrintWriter toServer, BufferedReader fromServer, BufferedReader keyboard) throws IOException{
+        toServer.println("2");
+        String s = fromServer.readLine();
+        System.out.println(s);
+        int num = Integer.parseInt(s);
+        System.out.println(num);
+        for(int i = 0; i < num; i++){
+            //System.out.println(fromServer.readLine());
+        }
+        System.out.println("Indique o Id do servidor a retirar");  
+        String id = keyboard.readLine();
+        toServer.println(id);
+        System.out.println("Indique o tipo do servidor a retirar");
+        String tipo = keyboard.readLine();
+        toServer.println(tipo);
+    }
+    
     public static void consultaDivida(PrintWriter toServer)throws IOException{
         toServer.println("3");
     }
+    
+  
     
     public static void main(String args[]) throws IOException, UnknownHostException{
 		Socket cs = new Socket("127.0.0.1", 9999);
@@ -82,29 +101,32 @@ public class Client {
                 Thread t = new Thread(sc);
                 t.start();
                 
-                System.out.println("0 -> Servidor a pedido");
-                System.out.println("1 -> Servidor a leilão");
-                System.out.println("2 -> Libertar servidor");
-                System.out.println("3 -> Consultar conta");
-                
-                x = keyboard.readLine();
-                if(x.equals("0")){
-                    servidorPedido(toServer, keyboard);
-                }
-                else if(x.equals("1")){
+                //verificar condiçao while
+                boolean m = true;
+                while(m){
+                    System.out.println("0 -> Servidor a pedido");
+                    System.out.println("1 -> Servidor a leilão");
+                    System.out.println("2 -> Libertar servidor");
+                    System.out.println("3 -> Consultar conta");
+                    System.out.println("4 -> Sair");
+
+                    x = keyboard.readLine();
+                    if(x.equals("0")){
+                        servidorPedido(toServer, keyboard);
+                    }
+                    else if(x.equals("1")){
+
+                    }
+                    else if(x.equals("2")){
+                        libertaServidor(toServer, fromServer, keyboard);
+                    }
+                    else if(x.equals("3")){
+                        consultaDivida(toServer);
+                    }
+                    else if(x.equals("4")){
+                        m = false;
+                    }
                     
-                }
-                else if(x.equals("2")){
-                    
-                }
-                else if(x.equals("3")){
-                    consultaDivida(toServer);
-                }
-                
-                try{
-                    t.join();
-                }catch(Exception e){
-                    System.out.println("erro no join");
                 }
 	}
 }

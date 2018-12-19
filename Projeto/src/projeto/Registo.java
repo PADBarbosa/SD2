@@ -40,6 +40,15 @@ public class Registo {
         return -1;
     }
     
-    
- 
+    public void retiraServidor(String tipo, int id){
+        if(tipo.equals("large")){
+            this.large.libertaServidor(id);
+        }
+        else if(tipo.equals("medium")){
+            this.medium.libertaServidor(id);
+        }
+        else if(tipo.equals("small")){
+            this.small.libertaServidor(id);
+        }
+    }
 }

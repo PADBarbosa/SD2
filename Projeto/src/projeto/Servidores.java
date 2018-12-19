@@ -73,10 +73,13 @@ public class Servidores {
         this.vazios.add(id);
     }
     
-    public void libertaPedido(int id) {
+    public void libertaServidor(int id) {
         l.lock();
         Servidor s = this.servidores.get(id);
         s.liberta();
+        if(this.leilao.contains(id)){
+            this.leilao.remove(Integer.valueOf(id));
+        }
         this.vazios.add(id);
         this.c.signalAll();
         l.unlock();   
@@ -104,13 +107,4 @@ public class Servidores {
         }    
     }
     
-    public void libertaLeilao(int id) {
-        l.lock();
-        Servidor s = this.servidores.get(id);
-        s.liberta();
-        this.leilao.remove(Integer.valueOf(id));
-        this.vazios.add(id);
-        this.c.signalAll();
-        l.unlock();   
-    }     
 }

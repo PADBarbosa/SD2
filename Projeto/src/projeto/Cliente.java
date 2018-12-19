@@ -5,6 +5,7 @@
  */
 package projeto;
 
+import java.io.PrintWriter;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -66,6 +67,14 @@ public class Cliente {
         long segundos = duracao.getSeconds();
         float taxa = r.getTaxa();
         return (segundos * taxa);
+    }
+    
+    public List<String> listaIds(){
+        List<String> res = new ArrayList<>();
+        for(Reserva r : reservas.values()){
+            res.add(r.getId() + " " + r.getTipo());
+        }
+        return res;
     }
     
 }
