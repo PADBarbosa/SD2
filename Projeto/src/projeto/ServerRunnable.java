@@ -10,7 +10,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -76,17 +75,17 @@ public class ServerRunnable implements Runnable{
                             }
                         }                        
                     }
-                    while(true){
+                    boolean sair = false;
+                    while(!sair){
                         x = in.readLine();
                         System.out.println(x);
-                        System.out.println("apos registo");
                         
                         if(x.equals("0")){
-                            String tipo = in.readLine();
+                            String tipo = (in.readLine()).toLowerCase();
                             new Thread(new ThreadPedido(tipo, email, out, this.registo, this.clientes)).start();
                         }
                         else if(x.equals("1")){
-                            String tipo = in.readLine();
+                            String tipo = (in.readLine()).toLowerCase();
                             float valor = Float.parseFloat(in.readLine());
                             new Thread(new ThreadLeilao(tipo, email, valor, out, this.registo, this.clientes)).start();
                             
@@ -98,7 +97,7 @@ public class ServerRunnable implements Runnable{
                                 out.println(s);
                             }
                             int id = Integer.parseInt(in.readLine());
-                            String tipo = in.readLine();
+                            String tipo = (in.readLine()).toLowerCase();
                             new Thread(new ThreadLiberta(this.registo, id, tipo, c, out)).start();
                         }
                         
@@ -107,6 +106,7 @@ public class ServerRunnable implements Runnable{
                         }
                         else if(x.equals("4")){
                             out.close();
+                            sair = true;
                         }
                     }
 		} catch (Exception e){
@@ -115,8 +115,6 @@ public class ServerRunnable implements Runnable{
                 }
 	}
 }
-
-
 
 class ThreadPedido implements Runnable{
     private String tipo;
@@ -149,13 +147,6 @@ class ThreadPedido implements Runnable{
     
 }
 
-
-
-
-
-
-
-
 class ThreadLeilao implements Runnable{
     private String tipo;
     private String email;
@@ -183,15 +174,6 @@ class ThreadLeilao implements Runnable{
     
 }
 
-
-
-
-
-
-
-
-
-
 class ThreadLiberta implements Runnable{
     private Registo registo;
     private Integer id;
@@ -215,8 +197,6 @@ class ThreadLiberta implements Runnable{
     }
     
 }
-
-
 
 class ThreadConsulta implements Runnable{
     private String email;

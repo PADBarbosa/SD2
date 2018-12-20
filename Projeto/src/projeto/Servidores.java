@@ -86,15 +86,15 @@ public class Servidores {
         try{
             Licitacao l = new Licitacao(valor, i);
             this.licitacoes.add(l);
-            this.melhorLicitacao = this.licitacoes.last().getId();
-            while(this.vazios.isEmpty() || (i != this.melhorLicitacao)){
+            //this.melhorLicitacao = this.licitacoes.last().getId();
+            while(this.vazios.isEmpty() || (i != this.licitacoes.last().getId())){
                 c.await();
             }
             s = this.servidores.get(this.vazios.get(0));
             this.vazios.remove(0);
             s.reserva(email);
             this.leilao.add(s.getId());
-           this.licitacoes.remove(l);
+            this.licitacoes.remove(l);
             return s.getId();
         }
         catch(InterruptedException ex){
