@@ -37,7 +37,7 @@ public class Servidores {
     private List<Integer> vazios;
     
     //nome dos clientes à espera de leilão
-    private TreeSet<Licitacao> licitacoes;
+    private ArrayList<Licitacao> licitacoes;
     
     private int melhorLicitacao;
     
@@ -48,7 +48,7 @@ public class Servidores {
         this.servidores = new HashMap<>();
         this.leilao = new ArrayList<>();
         this.vazios = new ArrayList<>();
-        this.licitacoes = new TreeSet<>(new LicitacaoComparator());
+        this.licitacoes = new ArrayList<>();
         this.nLicitacao = 0;
     }
     
@@ -82,19 +82,18 @@ public class Servidores {
     public int reservaLeilao(String email, float valor){
         l.lock();
         Servidor s;
-        int i = this.nLicitacao;
+        int i = this.nLicitacao; // é preciso?
         try{
             Licitacao l = new Licitacao(valor, i);
             this.licitacoes.add(l);
-            //this.melhorLicitacao = this.licitacoes.last().getId();
-            while(this.vazios.isEmpty() || (i != this.licitacoes.last().getId())){
+            while(this.vazios.isEmpty() || (i != this.licitacoes.get(0).getId())){
                 c.await();
             }
             s = this.servidores.get(this.vazios.get(0));
             this.vazios.remove(0);
             s.reserva(email);
             this.leilao.add(s.getId());
-            this.licitacoes.remove(l);
+            this.licitacoes.remove(0);
             return s.getId();
         }
         catch(InterruptedException ex){
@@ -120,6 +119,7 @@ public class Servidores {
             this.leilao.remove(Integer.valueOf(id));
         }
         this.vazios.add(id);
+        this.licitacoes.sort(new LicitacaoComparator());
         this.c.signalAll();
         l.unlock();   
     }    
