@@ -34,6 +34,14 @@ public class Licitacao {
         this.id = id;
     }
     
+    public boolean equals(Object o){
+        if(o==this) return true;
+        if(o==null || o.getClass() != this.getClass()) return false;
+
+        Licitacao l = (Licitacao) o;
+        return this.valor == l.getValor() &&
+               this.id == l.getId();
+    }
     
     
 }

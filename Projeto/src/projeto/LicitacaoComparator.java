@@ -15,9 +15,7 @@ public class LicitacaoComparator implements Comparator<Licitacao>{
     
     
     public int compare(Licitacao l1, Licitacao l2) {
-        if(l1.getValor() > l2.getValor()){
-            return 1;
-        }
-        return -1;
+        return Float.compare(l1.getValor(), l2.getValor());
     }
 }
+    

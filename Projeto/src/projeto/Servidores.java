@@ -94,7 +94,7 @@ public class Servidores {
             this.vazios.remove(0);
             s.reserva(email);
             this.leilao.add(s.getId());
-            this.licitacoes.remove(0);
+           this.licitacoes.remove(l);
             return s.getId();
         }
         catch(InterruptedException ex){
