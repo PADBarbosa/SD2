@@ -31,13 +31,6 @@ public class Client {
     
     public static void libertaServidor(PrintWriter toServer, BufferedReader fromServer, BufferedReader keyboard) throws IOException{
         toServer.println("2");
-        String s = fromServer.readLine();
-        System.out.println(s);
-        int num = Integer.parseInt(s);
-        System.out.println(num);
-        for(int i = 0; i < num; i++){
-            //System.out.println(fromServer.readLine());
-        }
         System.out.println("Indique o Id do servidor a retirar");  
         String id = keyboard.readLine();
         toServer.println(id);

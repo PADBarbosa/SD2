@@ -100,9 +100,8 @@ class ServerRunnable implements Runnable{
                         else if(x.equals("2")){
                             Cliente c = clientes.getPorEmail(email);
                             List<String> reservas = c.listaIds();
-                            out.println(Integer.toString(reservas.size()));
                             for(String s : reservas){
-                                //out.println(s);
+                                out.println(s);
                             }
                             String id = in.readLine();
                             String tipo = in.readLine();

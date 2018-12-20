@@ -77,4 +77,6 @@ public class Cliente {
         return res;
     }
     
+   // public void cancelaReserva(int id)
+    
 }
