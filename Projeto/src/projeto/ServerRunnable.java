@@ -88,11 +88,8 @@ public class ServerRunnable implements Runnable{
                         else if(x.equals("1")){
                             String tipo = in.readLine();
                             float valor = Float.parseFloat(in.readLine());
-                            int res = registo.reservaLeilao(tipo, email, valor);
+                            new Thread(new ThreadLeilao(tipo, email, valor, out, this.registo, this.clientes)).start();
                             
-                            Cliente c = clientes.getPorEmail(email);
-                            c.adicionaReservaLeilao(res, LocalDateTime.now(), tipo, valor);
-                            out.println("Alocado servidor número: " + res);
                         }
                         else if(x.equals("2")){
                             Cliente c = clientes.getPorEmail(email);
@@ -148,6 +145,47 @@ class ThreadPedido implements Runnable{
     }
     
 }
+
+
+
+
+
+
+
+
+class ThreadLeilao implements Runnable{
+    private String tipo;
+    private String email;
+    private float valor;
+    private Registo registo;
+    private Clientes clientes;
+    private PrintWriter out;
+
+    public ThreadLeilao(String tipo, String email, float valor, PrintWriter out, Registo registo, Clientes clientes) {
+        this.tipo = tipo;
+        this.email = email;
+        this.out = out;
+        this.registo = registo;
+        this.clientes = clientes;
+        this.valor = valor;
+    }
+        
+    @Override
+    public void run() {
+        int res = registo.reservaLeilao(tipo, email, valor);
+        Cliente c = clientes.getPorEmail(email);
+        c.adicionaReservaLeilao(res, LocalDateTime.now(), tipo, valor);
+        out.println("Alocado servidor número: " + res);
+    }
+    
+}
+
+
+
+
+
+
+
 
 
 
