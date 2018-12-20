@@ -13,18 +13,34 @@ import java.util.Map;
  * @author ze
  */
 public class Registo {
+    int contador;
     private Servidores large;
     private Servidores medium;
     private Servidores small;
 
     public Registo() {
+        this.contador = 0;
         this.large = new Servidores();
-        this.large.adicionaServidores(1, "large", (float) 0.5);
-        this.large.adicionaServidores(2, "large", (float) 0.5);
-        this.large.adicionaServidores(3, "large", (float) 0.5);
-        
         this.medium = new Servidores();
         this.small = new Servidores();
+        adicionaServidor("large");
+        adicionaServidor("medium");
+        adicionaServidor("medium");
+        adicionaServidor("small");
+        adicionaServidor("small");
+        adicionaServidor("small");
+    }
+    
+    public void adicionaServidor(String tipo) {
+        if(tipo.equals("large")){
+            this.large.adicionaServidores(this.contador, tipo, Tipos.getPreco(tipo));
+        }
+        else if(tipo.equals("medium")){
+             this.medium.adicionaServidores(this.contador, tipo, Tipos.getPreco(tipo));
+        }
+        else if(tipo.equals("small")){
+             this.small.adicionaServidores(this.contador, tipo, Tipos.getPreco(tipo));
+        }
     }
     
     public int reservaPedido(String tipo, String email){

@@ -59,14 +59,17 @@ public class Cliente {
         this.reservas.put(id, r);
     }
     
-    public float valorPagar(int id) {
-        Reserva r = reservas.get(id);
-        LocalDateTime inicio = r.getDataReserva();
-        LocalDateTime atual = LocalDateTime.now();
-        Duration duracao = Duration.between(inicio, atual);
-        long segundos = duracao.getSeconds();
-        float taxa = r.getTaxa();
-        return (segundos * taxa);
+    public float valorPagar(){
+        float valor = this.valorDivida;
+        for(Reserva r : reservas.values()) {
+            LocalDateTime inicio = r.getDataReserva();
+            LocalDateTime atual = LocalDateTime.now();
+            Duration duracao = Duration.between(inicio, atual);
+            long segundos = duracao.getSeconds();
+            float taxa = r.getTaxa();
+            valor += (segundos * taxa);
+        }
+        return valor;
     }
     
     public List<String> listaIds(){
@@ -77,6 +80,8 @@ public class Cliente {
         return res;
     }
     
-   // public void cancelaReserva(int id)
+   public void cancelaReserva(int id) {
+       this.reservas.remove(id);
+   }
     
 }

@@ -103,14 +103,15 @@ class ServerRunnable implements Runnable{
                             for(String s : reservas){
                                 out.println(s);
                             }
-                            String id = in.readLine();
+                            int id = Integer.parseInt(in.readLine());
                             String tipo = in.readLine();
-                            registo.retiraServidor(tipo , Integer.parseInt(id));
+                            registo.retiraServidor(tipo , id);
+                            c.cancelaReserva(id);
                         }
                         
                         else if(x.equals("3")){
                             Cliente c = clientes.getPorEmail(email);
-                            float valorDivida = c.getValorDivida();
+                            float valorDivida = c.valorPagar();
                             System.out.println("divida" + valorDivida);
                             out.println("Valor em divida: " + valorDivida);
                         }
