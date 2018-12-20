@@ -105,6 +105,9 @@ public class ServerRunnable implements Runnable{
                         else if(x.equals("3")){
                             new Thread(new ThreadConsulta(email, this.clientes, out)).start();
                         }
+                        else if(x.equals("4")){
+                            out.close();
+                        }
                     }
 		} catch (Exception e){
                     System.out.println("Asneira");

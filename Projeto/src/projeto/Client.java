@@ -131,16 +131,15 @@ public class Client {
                         consultaDivida(toServer);
                     }
                     else if(x.equals("4")){
+                        toServer.println("4");
                         m = false;
-                    }
-                    
+                    }   
                 }
 	}
 }
 
 class ServerToClient implements Runnable{
     BufferedReader le;
-    PrintWriter escreve;
     
     public ServerToClient(BufferedReader in){
         le = in;
@@ -152,9 +151,11 @@ class ServerToClient implements Runnable{
             while((message = le.readLine()) != null){
                 System.out.println(message);
             }
-            escreve.close();
             le.close();
-	}catch(Exception e){System.out.println("Erro cliente");}
+        }catch(Exception e){
+            System.out.println("Erro cliente");
+            e.printStackTrace();
+        }
     }
 }
 
