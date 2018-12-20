@@ -49,14 +49,14 @@ public class Leilao {
         this.licitacoesPequenos = licitacoesPequenos;
     }
     
-    public String ganhaLicitacao(List<Licitacao> licitacoes){
+   /* public String ganhaLicitacao(List<Licitacao> licitacoes){
         String res = new String();
         float v = 0;
         for(Licitacao l : licitacoes){
-            if(l.getValor() > v) res = l.getCliente();
+            if(l.getValor() > v) res = l.getId();
         }
         return res;
-    }
+    }*/
    // quando for para acordar os clientes que fizeram a licitacao primeiro ele vai procurar na lista dos pedidos individuais
    // se não encontrar vai para a lista correspondente dos leiloes
    // criar uma variavel e guardar nela o nome do cliente que ganha a licitacao para aquele tipo de servidor

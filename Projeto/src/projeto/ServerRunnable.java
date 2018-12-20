@@ -18,7 +18,7 @@ import java.util.List;
  *
  * @author ze
  */
-class ServerRunnable implements Runnable{
+public class ServerRunnable implements Runnable{
 	Socket cs;
         Autenticacao autenticacao;
         Registo registo;
@@ -83,19 +83,16 @@ class ServerRunnable implements Runnable{
                         
                         if(x.equals("0")){
                             String tipo = in.readLine();
-                            System.out.println(tipo);
-                            System.out.println("dentro if");
-                            int res = registo.reservaPedido(tipo, email);
-                            System.out.println("reservado");
-                            System.out.println(res);
-                            if(res == -1){
-                                out.println("Deu merda jovem");
-                            }
-                            else{
-                                Cliente c = clientes.getPorEmail(email);
-                                c.adicionaReserva(res, LocalDateTime.now(), tipo);
-                                out.println("Alocado servidor número: " + res);
-                            }
+                            new Thread(new ThreadPedido(tipo, email, out, this.registo, this.clientes)).start();
+                        }
+                        else if(x.equals("1")){
+                            String tipo = in.readLine();
+                            float valor = Float.parseFloat(in.readLine());
+                            int res = registo.reservaLeilao(tipo, email, valor);
+                            
+                            Cliente c = clientes.getPorEmail(email);
+                            c.adicionaReservaLeilao(res, LocalDateTime.now(), tipo, valor);
+                            out.println("Alocado servidor número: " + res);
                         }
                         else if(x.equals("2")){
                             Cliente c = clientes.getPorEmail(email);
@@ -105,15 +102,11 @@ class ServerRunnable implements Runnable{
                             }
                             int id = Integer.parseInt(in.readLine());
                             String tipo = in.readLine();
-                            registo.retiraServidor(tipo , id);
-                            c.cancelaReserva(id);
+                            new Thread(new ThreadLiberta(this.registo, id, tipo, c, out)).start();
                         }
                         
                         else if(x.equals("3")){
-                            Cliente c = clientes.getPorEmail(email);
-                            float valorDivida = c.valorPagar();
-                            System.out.println("divida" + valorDivida);
-                            out.println("Valor em divida: " + valorDivida);
+                            new Thread(new ThreadConsulta(email, this.clientes, out)).start();
                         }
                     }
 		} catch (Exception e){
@@ -121,4 +114,86 @@ class ServerRunnable implements Runnable{
                     e.printStackTrace();
                 }
 	}
+}
+
+
+
+class ThreadPedido implements Runnable{
+    private String tipo;
+    private String email;
+    private PrintWriter out;
+    private Registo registo;
+    private Clientes clientes;
+
+    public ThreadPedido(String tipo, String email, PrintWriter out, Registo registo, Clientes clientes) {
+        this.tipo = tipo;
+        this.email = email;
+        this.out = out;
+        this.registo = registo;
+        this.clientes = clientes;
+    }
+        
+    @Override
+    public void run() {
+        int res = registo.reservaPedido(tipo, email);
+        if(res == -1){
+            out.println("Erro");
+        }
+        else{
+            Cliente c = clientes.getPorEmail(email);
+            c.adicionaReservaPedido(res, LocalDateTime.now(), tipo);
+            out.println("Alocado servidor número: " + res);
+        }
+        
+    }
+    
+}
+
+
+
+class ThreadLiberta implements Runnable{
+    private Registo registo;
+    private Integer id;
+    private String tipo;
+    private Cliente cliente;
+    private PrintWriter out;
+    
+
+    public ThreadLiberta(Registo registo, Integer id, String tipo, Cliente cliente, PrintWriter out) {
+        this.registo = registo;
+        this.id = id;
+        this.tipo = tipo;
+        this.cliente = cliente;
+        this.out = out;
+    }
+        
+    @Override
+    public void run() {
+        this.registo.retiraServidor(tipo , id);
+        this.cliente.cancelaReserva(id);
+    }
+    
+}
+
+
+
+class ThreadConsulta implements Runnable{
+    private String email;
+    private Clientes clientes;
+    private PrintWriter out;
+    
+
+    public ThreadConsulta(String email, Clientes clientes, PrintWriter out) {
+        this.email = email;
+        this.out = out;
+        this.clientes = clientes;
+    }
+        
+    @Override
+    public void run() {
+        Cliente c = clientes.getPorEmail(email);
+        float valorDivida = c.valorPagar();
+        out.println("Valor em divida: " + valorDivida);
+    }
+    
 }

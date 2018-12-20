@@ -29,6 +29,20 @@ public class Client {
         toServer.println(tipo);
     }
     
+    public static void servidorLeilao(PrintWriter toServer, BufferedReader keyboard) throws IOException{
+        System.out.println("Escolha o tipo de servidor");
+        System.out.println("Large");
+        System.out.println("Medium");
+        System.out.println("Small");
+        
+        String tipo = keyboard.readLine();
+        System.out.println("Indique o valor da licitação");
+        String valor = keyboard.readLine();
+        toServer.println("1");
+        toServer.println(tipo);
+        toServer.println(valor);
+    }
+    
     public static void libertaServidor(PrintWriter toServer, BufferedReader fromServer, BufferedReader keyboard) throws IOException{
         toServer.println("2");
         System.out.println("Indique o Id do servidor a retirar");  
@@ -108,7 +122,7 @@ public class Client {
                         servidorPedido(toServer, keyboard);
                     }
                     else if(x.equals("1")){
-
+                        servidorLeilao(toServer, keyboard);
                     }
                     else if(x.equals("2")){
                         libertaServidor(toServer, fromServer, keyboard);
@@ -143,3 +157,4 @@ class ServerToClient implements Runnable{
 	}catch(Exception e){System.out.println("Erro cliente");}
     }
 }
+

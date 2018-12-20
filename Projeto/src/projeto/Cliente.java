@@ -5,9 +5,7 @@
  */
 package projeto;
 
-import java.io.PrintWriter;
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,8 +51,13 @@ public class Cliente {
         this.reservas = reservas;
     }
     
-    public void adicionaReserva(int id, LocalDateTime dataReserva, String tipo){
+    public void adicionaReservaPedido(int id, LocalDateTime dataReserva, String tipo){
         float taxa = Tipos.getPreco(tipo);
+        Reserva r = new Reserva(id, taxa, dataReserva, tipo);
+        this.reservas.put(id, r);
+    }
+    
+    public void adicionaReservaLeilao(int id, LocalDateTime dataReserva, String tipo, float taxa){
         Reserva r = new Reserva(id, taxa, dataReserva, tipo);
         this.reservas.put(id, r);
     }
@@ -81,6 +84,13 @@ public class Cliente {
     }
     
    public void cancelaReserva(int id) {
+       Reserva r = this.reservas.get(id); 
+       LocalDateTime inicio = r.getDataReserva();
+       LocalDateTime atual = LocalDateTime.now();
+       Duration duracao = Duration.between(inicio, atual);
+       long segundos = duracao.getSeconds();
+       float taxa = r.getTaxa();
+       valorDivida += (segundos * taxa);
        this.reservas.remove(id);
    }
     

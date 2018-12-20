@@ -5,8 +5,6 @@
  */
 package projeto;
 
-import java.util.List;
-import java.util.Map;
 
 /**
  *
@@ -52,6 +50,19 @@ public class Registo {
         }
         else if(tipo.equals("small")){
             return this.small.reservaPedido(email);
+        }
+        return -1;
+    }
+    
+    public int reservaLeilao(String tipo, String email, float valor){
+        if(tipo.equals("large")){
+            return this.large.reservaLeilao(email, valor);
+        }
+        else if(tipo.equals("medium")){
+            return this.medium.reservaLeilao(email, valor);
+        }
+        else if(tipo.equals("small")){
+            return this.small.reservaLeilao(email, valor);
         }
         return -1;
     }

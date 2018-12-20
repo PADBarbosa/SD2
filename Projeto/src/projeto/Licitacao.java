@@ -11,27 +11,27 @@ package projeto;
  */
 public class Licitacao {
     private float valor;
-    private String cliente;
+    private int id;
 
-    public Licitacao(float valor, String cliente) {
+    public Licitacao(float valor, int id) {
         this.valor = valor;
-        this.cliente = cliente;
+        this.id = id;
     }
     
     public float getValor() {
         return valor;
     }
 
-    public String getCliente() {
-        return cliente;
+    public int getId() {
+        return id;
     }
 
     public void setValor(float valor) {
         this.valor = valor;
     }
 
-    public void setCliente(String cliente) {
-        this.cliente = cliente;
+    public void setId(int id) {
+        this.id = id;
     }
     
     
