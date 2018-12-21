@@ -21,11 +21,11 @@ public class Clientes {
         this.adicionaCliente(c);
     }
     
-    public void adicionaCliente(Cliente c){
+    public synchronized void adicionaCliente(Cliente c){
         this.clientes.put(c.getEmail(), c);
     }
     
-    public Cliente getPorEmail(String email){
+    public synchronized Cliente getPorEmail(String email){
         return clientes.get(email);
     }
 }

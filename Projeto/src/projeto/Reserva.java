@@ -22,6 +22,7 @@ public class Reserva {
 
     public Reserva(int id, float taxa, LocalDateTime dataReserva, String tipo) {
         this.id = id;
+        //por hora
         this.taxa = taxa;
         this.dataReserva = dataReserva;
         this.tipo = tipo;
@@ -42,7 +43,7 @@ public class Reserva {
     public String getTipo() {
         return tipo;
     }
-
+/*
     public void setId(int id) {
         this.id = id;
     }
@@ -57,5 +58,5 @@ public class Reserva {
 
     public void setTipo(String tipo) {
         this.tipo = tipo;
-    }
+    }*/
 }

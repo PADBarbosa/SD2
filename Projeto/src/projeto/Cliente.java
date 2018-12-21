@@ -70,7 +70,7 @@ public class Cliente {
             Duration duracao = Duration.between(inicio, atual);
             long segundos = duracao.getSeconds();
             float taxa = r.getTaxa();
-            valor += (segundos * taxa);
+            valor += (segundos * (taxa /3600));
         }
         return valor;
     }

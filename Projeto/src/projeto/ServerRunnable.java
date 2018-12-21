@@ -215,7 +215,8 @@ class ThreadConsulta implements Runnable{
     public void run() {
         Cliente c = clientes.getPorEmail(email);
         float valorDivida = c.valorPagar();
-        out.println("Valor em divida: " + valorDivida);
+        String formatada = String.format( "%.2f", valorDivida);
+        out.println("Valor em dívida" + formatada);
     }
     
 }

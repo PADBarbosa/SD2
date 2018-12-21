@@ -25,16 +25,8 @@ public class Autenticacao {
     public Autenticacao(Map<String, String> users) {
         this.users = users;
     }
-
-    public Map<String, String> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Map<String, String> users) {
-        this.users = users;
-    }
     
-    public boolean registaUser(String email, String password){
+    public synchronized boolean registaUser(String email, String password){
         if(users.containsKey(email)){
             return false;
         }
@@ -42,7 +34,7 @@ public class Autenticacao {
         return true;
     }
     
-    public boolean verificaUser(String email, String password){
+    public synchronized boolean verificaUser(String email, String password){
         if(this.users.containsKey(email)){
             if(this.users.get(email).equals(password)){
                 return true;
