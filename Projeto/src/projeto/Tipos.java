@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package projeto;
 
 import java.util.ArrayList;
@@ -10,7 +5,7 @@ import java.util.List;
 
 /**
  *
- * @author Barbosa
+ * @author José Pinto (A81317); Luís Correia (A81141); Pedro Barbosa (A82068)
  */
 public final class Tipos {
     
@@ -22,7 +17,7 @@ public final class Tipos {
         add(new Tipo("medium", 10));
         add(new Tipo("small", 5));
     }};
-     static final List<String> st = new ArrayList<String>() {{
+    static final List<String> st = new ArrayList<String>() {{
         for (Tipo i : tipos) {       //parar o ciclo quando encontrar?
             add(i.getTipo());
         }
@@ -37,12 +32,12 @@ public final class Tipos {
         }
         return taxa;
     }
-     public static List<String> getTipos() {
+    
+    public static List<String> getTipos() {
         return st;                        //clone?
     }
 }
    
-
 class Tipo {
     private String tipo;
     private float taxa;
@@ -59,5 +54,4 @@ class Tipo {
     public float getTaxa() {
         return taxa;
     }
-    
 }

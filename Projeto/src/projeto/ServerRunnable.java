@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package projeto;
 
 import java.io.BufferedReader;
@@ -15,7 +10,7 @@ import java.util.List;
 
 /**
  *
- * @author ze
+ * @author José Pinto (A81317); Luís Correia (A81141); Pedro Barbosa (A82068)
  */
 public class ServerRunnable implements Runnable{
 	Socket cs;
@@ -97,8 +92,7 @@ public class ServerRunnable implements Runnable{
                                 out.println(s);
                             }
                             int id = Integer.parseInt(in.readLine());
-                            String tipo = (in.readLine()).toLowerCase();
-                            new Thread(new ThreadLiberta(this.registo, id, tipo, c, out)).start();
+                            new Thread(new ThreadLiberta(this.registo, id, c, out)).start();
                         }
                         
                         else if(x.equals("3")){
@@ -178,23 +172,22 @@ class ThreadLeilao implements Runnable{
 class ThreadLiberta implements Runnable{
     private Registo registo;
     private Integer id;
-    private String tipo;
     private Cliente cliente;
     private PrintWriter out;
     
 
-    public ThreadLiberta(Registo registo, Integer id, String tipo, Cliente cliente, PrintWriter out) {
+    public ThreadLiberta(Registo registo, Integer id, Cliente cliente, PrintWriter out) {
         this.registo = registo;
         this.id = id;
-        this.tipo = tipo;
         this.cliente = cliente;
         this.out = out;
     }
         
     @Override
     public void run() {
-        this.registo.retiraServidor(tipo , id);
+        this.registo.retiraServidor(id);
         this.cliente.cancelaReserva(id);
+        out.println("Servidor libertado");
     }
     
 }
@@ -244,7 +237,7 @@ class ThreadEspera implements Runnable{
         System.out.println("run com sucesso");
         this.r.esperaPerderLeilao(tipo, id, email);
         c.cancelaReserva(id);
-        out.println("Reserva" + id + " de leilão libertada");
+        out.println("Reserva " + id + " de leilão libertada");
     }
     
 }

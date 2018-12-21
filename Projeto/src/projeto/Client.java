@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package projeto;
 
 import java.io.BufferedReader;
@@ -15,12 +10,12 @@ import java.util.List;
 
 /**
  *
- * @author ze
+ * @author José Pinto (A81317); Luís Correia (A81141); Pedro Barbosa (A82068)
  */
 public class Client {
     
     public static void servidorPedido(PrintWriter toServer, BufferedReader keyboard) throws IOException{
-        System.out.println("Escolha o tipo de servidor");
+        System.out.println("Escolha o tipo de servidor: ");
         for( String s : Tipos.getTipos()) {
              System.out.println(s);
         }
@@ -30,13 +25,13 @@ public class Client {
     }
     
     public static void servidorLeilao(PrintWriter toServer, BufferedReader keyboard) throws IOException{
-        System.out.println("Escolha o tipo de servidor");
+        System.out.println("Escolha o tipo de servidor: ");
         for( String s : Tipos.getTipos()) {
              System.out.println(s);
         }
         
         String tipo = keyboard.readLine();
-        System.out.println("Indique o valor da licitação");
+        System.out.println("Indique o valor da licitação: ");
         String valor = keyboard.readLine();
         toServer.println("1");
         toServer.println(tipo);
@@ -45,12 +40,9 @@ public class Client {
     
     public static void libertaServidor(PrintWriter toServer, BufferedReader fromServer, BufferedReader keyboard) throws IOException{
         toServer.println("2");
-        System.out.println("Indique o Id do servidor a retirar");  
+        System.out.println("Indique o Id do servidor a retirar: ");  
         String id = keyboard.readLine();
         toServer.println(id);
-        System.out.println("Indique o tipo do servidor a retirar");
-        String tipo = keyboard.readLine();
-        toServer.println(tipo);
     }
     
     public static void consultaDivida(PrintWriter toServer)throws IOException{
@@ -72,17 +64,17 @@ public class Client {
                 while(!autenticado) {
                     boolean inputValido = false; 
                     while (!inputValido) {
-                        System.out.println("0 -> Criar conta");
+                        System.out.println("\n0 -> Criar conta");
                         System.out.println("1 -> Autenticar");
 
                         x = keyboard.readLine();
                         if(x.equals("0")) {
-                            System.out.println("a criar conta...");
+                            System.out.println("\nA criar conta...");
 
                             inputValido = true;
                         }
                         else if(x.equals("1")) {
-                            System.out.println("a autenticar...");
+                            System.out.println("\nA autenticar...");
                             inputValido = true;
                         } 
                         else {
@@ -90,10 +82,10 @@ public class Client {
                         }
                     } 
                     toServer.println(x);
-                    System.out.println("email");
+                    System.out.println("Email");
                     String email = keyboard.readLine();
                     toServer.println(email);
-                    System.out.println("password");
+                    System.out.println("Password");
                     String password = keyboard.readLine();
                     toServer.println(password);
                     
@@ -111,7 +103,7 @@ public class Client {
                 //verificar condiçao while
                 boolean m = true;
                 while(m){
-                    System.out.println("0 -> Servidor a pedido");
+                    System.out.println("\n0 -> Servidor a pedido");
                     System.out.println("1 -> Servidor a leilão");
                     System.out.println("2 -> Libertar servidor");
                     System.out.println("3 -> Consultar conta");

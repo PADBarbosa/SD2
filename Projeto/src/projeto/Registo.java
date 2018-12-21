@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package projeto;
 
 import java.util.HashMap;
@@ -11,7 +6,7 @@ import java.util.Map;
 
 /**
  *
- * @author ze
+ * @author José Pinto (A81317); Luís Correia (A81141); Pedro Barbosa (A82068)
  */
 public class Registo {
     int contador;
@@ -52,9 +47,12 @@ public class Registo {
         return s.reservaLeilao(email, valor);
     }
     
-    public void retiraServidor(String tipo, int id){
-        Servidores s = this.servidores.get(tipo);
-        s.libertaServidor(id);
+    public void retiraServidor(int id){             //não devia retirar do Map??
+       for(Servidores ss : this.servidores.values()){
+           if(ss.procuraId(id) == id){
+               ss.libertaServidor(id);
+           }
+       } 
     }
     
     public void esperaPerderLeilao(String tipo, int id, String email) {

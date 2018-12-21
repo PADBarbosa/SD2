@@ -1,18 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package projeto;
 
-import java.io.PrintWriter;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -21,8 +12,9 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author ze
+ * @author José Pinto (A81317); Luís Correia (A81141); Pedro Barbosa (A82068)
  */
+
 public class Servidores {
     private Lock l = new ReentrantLock();
     Condition c = l.newCondition();
@@ -130,6 +122,18 @@ public class Servidores {
         this.c.signalAll();
         l.unlock();   
     }  
+    
+    public int procuraId(int id){
+        l.lock();
+        try{
+            for(int i : this.servidores.keySet()){
+                if(i == id) return i;
+            }
+            return -1;
+        }finally{
+            l.unlock();
+        }
+    }
     
     //1 se foi libertado
     //0 se foi forçado
