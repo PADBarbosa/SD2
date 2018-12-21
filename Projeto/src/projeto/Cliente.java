@@ -52,7 +52,7 @@ public class Cliente {
     }
     
     public void adicionaReservaPedido(int id, LocalDateTime dataReserva, String tipo){
-        float taxa = Tipos.getPreco(tipo);
+        float taxa = Tipos.getTaxa(tipo);
         Reserva r = new Reserva(id, taxa, dataReserva, tipo);
         this.reservas.put(id, r);
     }

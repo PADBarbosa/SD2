@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.List;
 
 /**
  *
@@ -20,10 +21,9 @@ public class Client {
     
     public static void servidorPedido(PrintWriter toServer, BufferedReader keyboard) throws IOException{
         System.out.println("Escolha o tipo de servidor");
-        System.out.println("Large");
-        System.out.println("Medium");
-        System.out.println("Small");
-        
+        for( String s : Tipos.getTipos()) {
+             System.out.println(s);
+        }
         String tipo = keyboard.readLine();
         toServer.println("0");
         toServer.println(tipo);
@@ -31,9 +31,9 @@ public class Client {
     
     public static void servidorLeilao(PrintWriter toServer, BufferedReader keyboard) throws IOException{
         System.out.println("Escolha o tipo de servidor");
-        System.out.println("Large");
-        System.out.println("Medium");
-        System.out.println("Small");
+        for( String s : Tipos.getTipos()) {
+             System.out.println(s);
+        }
         
         String tipo = keyboard.readLine();
         System.out.println("Indique o valor da licitação");
