@@ -168,6 +168,7 @@ class ThreadLeilao implements Runnable{
     public void run() {
         int res = registo.reservaLeilao(tipo, email, valor);
         Cliente c = clientes.getPorEmail(email);
+        (new Thread(new ThreadEspera(res, tipo, email, out, registo, c ))).start();
         c.adicionaReservaLeilao(res, LocalDateTime.now(), tipo, valor);
         out.println("Alocado servidor número: " + res);
     }
@@ -215,6 +216,34 @@ class ThreadConsulta implements Runnable{
         Cliente c = clientes.getPorEmail(email);
         float valorDivida = c.valorPagar();
         out.println("Valor em divida: " + valorDivida);
+    }
+    
+}
+
+
+class ThreadEspera implements Runnable{
+    private int id;
+    private String tipo;
+    private String email;
+    private PrintWriter out;
+    private Registo r;
+    private Cliente c;
+
+    public ThreadEspera(int id,String tipo, String email, PrintWriter out, Registo r, Cliente c) {
+        this.id = id;
+        this.tipo = tipo;
+        this.email = email;
+        this.out = out;
+        this.r = r;
+        this.c = c;
+    }
+    
+    @Override
+    public void run() {
+        System.out.println("run com sucesso");
+        this.r.esperaPerderLeilao(tipo, id, email);
+        c.cancelaReserva(id);
+        out.println("Reserva" + id + " de leilão libertada");
     }
     
 }

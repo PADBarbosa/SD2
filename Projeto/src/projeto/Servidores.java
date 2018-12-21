@@ -5,6 +5,7 @@
  */
 package projeto;
 
+import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,6 +26,10 @@ import java.util.logging.Logger;
 public class Servidores {
     private Lock l = new ReentrantLock();
     Condition c = l.newCondition();
+    
+    //para a thread que vai esperar pela perda do leilao 
+   // private Lock ll = new ReentrantLock();
+    Condition cl = l.newCondition();
     
     //chave-> id do servidor
     //guarda todos os servidores
@@ -66,6 +71,7 @@ public class Servidores {
             else { //Mudar para valor mais baixo
                 s = this.servidores.get(this.leilao.get(0));
                 this.leilao.remove(0);
+                cl.signalAll();
             }
             s.reserva(email);         
             return s.getId();          
@@ -117,10 +123,35 @@ public class Servidores {
         s.liberta();
         if(this.leilao.contains(id)){
             this.leilao.remove(Integer.valueOf(id));
+            cl.signalAll();
         }
         this.vazios.add(id);
         this.licitacoes.sort(new LicitacaoComparator());
         this.c.signalAll();
         l.unlock();   
-    }    
+    }  
+    
+    //1 se foi libertado
+    //0 se foi forçado
+    public void esperaPerderLeilao(int id, String email) {
+        System.out.println("começou");
+        this.l.lock();
+        
+        try {
+            while(this.leilao.contains(Integer.valueOf(id)) && this.servidores.get(id).getCliente().equals(email)) {
+                System.out.println("adormeceu");
+                cl.await();
+                System.out.println("acordou");
+            }
+        }
+        catch (InterruptedException ex) {
+            Logger.getLogger(Servidores.class.getName()).log(Level.SEVERE, null, ex);
+        }        finally {
+            System.out.println("saiu");
+            this.l.unlock();
+        }
+        
+    }
 }
+
+

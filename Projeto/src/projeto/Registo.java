@@ -5,6 +5,8 @@
  */
 package projeto;
 
+import java.io.PrintWriter;
+
 
 /**
  *
@@ -78,4 +80,19 @@ public class Registo {
             this.small.libertaServidor(id);
         }
     }
+    
+    public void esperaPerderLeilao(String tipo, int id, String email) {
+        System.out.println("entrou no registo");
+        if(tipo.equals("large")){
+            this.large.esperaPerderLeilao(id,email);
+        }
+        else if(tipo.equals("medium")){
+            this.medium.esperaPerderLeilao(id,email);
+        }
+        else if(tipo.equals("small")){
+            this.small.esperaPerderLeilao(id,email);
+        }
+    }
+    
+    
 }
