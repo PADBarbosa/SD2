@@ -90,5 +90,8 @@ public class Cliente {
         long segundos = duracao.getSeconds();
         return (segundos * (taxa /3600));
    }
-    
+   
+   public Reserva getReserva(int id) {
+       return this.reservas.get(id);
+   }
 }

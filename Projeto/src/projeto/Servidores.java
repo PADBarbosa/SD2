@@ -123,20 +123,6 @@ public class Servidores {
         l.unlock();   
     }  
     
-    public int procuraId(int id){
-        l.lock();
-        try{
-            for(int i : this.servidores.keySet()){
-                if(i == id) return i;
-            }
-            return -1;
-        }finally{
-            l.unlock();
-        }
-    }
-    
-    //1 se foi libertado
-    //0 se foi forçado
     public void esperaPerderLeilao(int id, String email) {
         System.out.println("começou");
         this.l.lock();

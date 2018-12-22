@@ -202,7 +202,8 @@ class ThreadLiberta implements Runnable{
         
     @Override
     public void run() {
-        this.registo.retiraServidor(id);
+        String t = this.cliente.getReserva(id).getTipo();
+        this.registo.retiraServidor(t, id);
         this.cliente.cancelaReserva(id, dataPedido);
         out.println("Servidor libertado");
     }

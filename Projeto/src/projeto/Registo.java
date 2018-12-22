@@ -16,7 +16,7 @@ public class Registo {
     private Servidores small;
 
     public Registo() {
-        this.contador = 0;
+        this.contador = 1;
         this.servidores = new HashMap<>();
         for( String s : Tipos.getTipos()) {
             this.servidores.put(s, new Servidores());
@@ -47,12 +47,9 @@ public class Registo {
         return s.reservaLeilao(email, valor);
     }
     
-    public void retiraServidor(int id){             //não devia retirar do Map??
-       for(Servidores ss : this.servidores.values()){
-           if(ss.procuraId(id) == id){
-               ss.libertaServidor(id);
-           }
-       } 
+    public void retiraServidor(String tipo, int id){      
+        Servidores s = this.servidores.get(tipo);
+        s.libertaServidor(id);
     }
     
     public void esperaPerderLeilao(String tipo, int id, String email) {
