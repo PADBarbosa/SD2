@@ -21,9 +21,6 @@ public class Registo {
         for( String s : Tipos.getTipos()) {
             this.servidores.put(s, new Servidores());
         }
-        this.large = new Servidores();
-        this.medium = new Servidores();
-        this.small = new Servidores();
         adicionaServidor("large");
         adicionaServidor("medium");
         adicionaServidor("medium");
@@ -35,6 +32,7 @@ public class Registo {
     public void adicionaServidor(String tipo) {
         Servidores s = this.servidores.get(tipo);
         s.adicionaServidores(this.contador, tipo, Tipos.getTaxa(tipo));
+        this.contador++;
     }
     
     public int reservaPedido(String tipo, String email){
