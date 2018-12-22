@@ -89,7 +89,12 @@ public class ServerRunnable implements Runnable{
                 else if(x.equals("1")){
                     String tipo = (in.readLine()).toLowerCase();
                     float valor = Float.parseFloat(in.readLine());
-                    new Thread(new ThreadLeilao(tipo, email, valor, out, this.registo, this.clientes)).start();
+                    if (valor > 0) {
+                        new Thread(new ThreadLeilao(tipo, email, valor, out, this.registo, this.clientes)).start();
+                    }
+                    else {
+                         out.println("Licitação tem que ser superior a 0");
+                    }
                 }
                 
                 //Libertar servidor
@@ -100,12 +105,14 @@ public class ServerRunnable implements Runnable{
                         out.println(s);
                     }
                     int id = Integer.parseInt(in.readLine());
-                    new Thread(new ThreadLiberta(this.registo, id, c, out)).start();
+                    LocalDateTime atual = LocalDateTime.now();
+                    new Thread(new ThreadLiberta(this.registo, id, c, out, atual)).start();
                 }
                 
                 //Consultar conta
                 else if(x.equals("3")){
-                    new Thread(new ThreadConsulta(email, this.clientes, out)).start();
+                    LocalDateTime atual = LocalDateTime.now();
+                    new Thread(new ThreadConsulta(email, this.clientes, out, atual)).start();
                 }
                 
                 //Sair
@@ -182,19 +189,21 @@ class ThreadLiberta implements Runnable{
     private Integer id;
     private Cliente cliente;
     private PrintWriter out;
+    private LocalDateTime dataPedido;
     
 
-    public ThreadLiberta(Registo registo, Integer id, Cliente cliente, PrintWriter out) {
+    public ThreadLiberta(Registo registo, Integer id, Cliente cliente, PrintWriter out, LocalDateTime dataPedido) {
         this.registo = registo;
         this.id = id;
         this.cliente = cliente;
         this.out = out;
+        this.dataPedido = dataPedido;
     }
         
     @Override
     public void run() {
         this.registo.retiraServidor(id);
-        this.cliente.cancelaReserva(id);
+        this.cliente.cancelaReserva(id, dataPedido);
         out.println("Servidor libertado");
     }
 }
@@ -203,17 +212,20 @@ class ThreadConsulta implements Runnable{
     private String email;
     private Clientes clientes;
     private PrintWriter out;
+    private LocalDateTime dataPedido;
+
     
-    public ThreadConsulta(String email, Clientes clientes, PrintWriter out) {
+    public ThreadConsulta(String email, Clientes clientes, PrintWriter out, LocalDateTime dataPedido) {
         this.email = email;
         this.out = out;
         this.clientes = clientes;
+        this.dataPedido = dataPedido;
     }
         
     @Override
     public void run() {
         Cliente c = clientes.getPorEmail(email);
-        float valorDivida = c.valorPagar();
+        float valorDivida = c.DividaAtual(dataPedido);
         String formatada = String.format( "%.2f", valorDivida);
         out.println("Valor em dívida " + formatada);
     }
@@ -240,7 +252,8 @@ class ThreadEspera implements Runnable{
     public void run() {
         System.out.println("run com sucesso");
         this.r.esperaPerderLeilao(tipo, id, email);
-        c.cancelaReserva(id);
+        LocalDateTime atual = LocalDateTime.now();
+        c.cancelaReserva(id, atual);
         out.println("Reserva " + id + " de leilão libertada");
     }
 }

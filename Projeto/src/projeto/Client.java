@@ -29,7 +29,7 @@ public class Client {
             System.out.println(s);
         }
         String tipo = keyboard.readLine();
-        System.out.println("Indique o valor da licitação: ");
+        System.out.println("Indique o valor da licitação(€/hora): ");
         String valor = keyboard.readLine();
         toServer.println("1");
         toServer.println(tipo);

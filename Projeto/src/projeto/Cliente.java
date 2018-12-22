@@ -10,6 +10,8 @@ import java.util.Map;
  *
  * @author José Pinto (A81317); Luís Correia (A81141); Pedro Barbosa (A82068)
  */
+
+//Adicionar sincronização?
 public class Cliente {
     String email;
     String password;
@@ -56,16 +58,13 @@ public class Cliente {
         Reserva r = new Reserva(id, taxa, dataReserva, tipo);
         this.reservas.put(id, r);
     }
-    
-    public float valorPagar(){
+    //dataCancelamento -> data em que foi recebido o pedido de cancelamento
+    public float DividaAtual(LocalDateTime dataCancelamento){
         float valor = this.valorDivida;
         for(Reserva r : reservas.values()) {
             LocalDateTime inicio = r.getDataReserva();
-            LocalDateTime atual = LocalDateTime.now();
-            Duration duracao = Duration.between(inicio, atual);
-            long segundos = duracao.getSeconds();
             float taxa = r.getTaxa();
-            valor += (segundos * (taxa /3600));
+            valor += calculaValorIntervalo(inicio, dataCancelamento, taxa);
         }
         return valor;
     }
@@ -77,16 +76,19 @@ public class Cliente {
         }
         return res;
     }
-    
-   public void cancelaReserva(int id) {
+    //dataCancelamento -> data em que foi recebido o pedido de cancelamento
+   public void cancelaReserva(int id, LocalDateTime dataCancelamento) {
        Reserva r = this.reservas.get(id); 
        LocalDateTime inicio = r.getDataReserva();
-       LocalDateTime atual = LocalDateTime.now();
-       Duration duracao = Duration.between(inicio, atual);
-       long segundos = duracao.getSeconds();
        float taxa = r.getTaxa();
-       valorDivida += (segundos * taxa);
+       valorDivida += calculaValorIntervalo(inicio, dataCancelamento, taxa);
        this.reservas.remove(id);
+   }
+   
+   public float calculaValorIntervalo(LocalDateTime inicio, LocalDateTime fim, float taxa) {
+        Duration duracao = Duration.between(inicio, fim);
+        long segundos = duracao.getSeconds();
+        return (segundos * (taxa /3600));
    }
     
 }
