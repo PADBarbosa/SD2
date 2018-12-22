@@ -13,101 +13,112 @@ import java.util.List;
  * @author José Pinto (A81317); Luís Correia (A81141); Pedro Barbosa (A82068)
  */
 public class ServerRunnable implements Runnable{
-	Socket cs;
-        Autenticacao autenticacao;
-        Registo registo;
-        Clientes clientes;
+    Socket cs;
+    Autenticacao autenticacao;
+    Registo registo;
+    Clientes clientes;
 
-	ServerRunnable(Socket clientSocket, Autenticacao autenticacao, Registo registo, Clientes clientes){
-		this.cs = clientSocket;
-                this.autenticacao = autenticacao;
-                this.registo = registo;
-                this.clientes = clientes;
-	}
+    public ServerRunnable(Socket clientSocket, Autenticacao autenticacao, Registo registo, Clientes clientes){
+        this.cs = clientSocket;
+        this.autenticacao = autenticacao;
+        this.registo = registo;
+        this.clientes = clientes;
+    }
 
-	public void run() {
-		try {
-                    PrintWriter out = new PrintWriter(this.cs.getOutputStream(), true);
-                    BufferedReader in = new BufferedReader(new InputStreamReader(this.cs.getInputStream()));
-                    
-                    //criar conta ou autenticar?
-                    //0 criar
-                    //1 autenticar
-                    boolean autenticado = false;
-                    
-                    boolean sucesso;
-                    String email = "";
-                    String password = "";
-                    String x = "";
-                    
-                    while(!autenticado) {
-                        x = in.readLine();
-                        email = in.readLine();
-                        password = in.readLine();
-                        System.out.println(x);
-                        System.out.println(email);
-                        System.out.println(password);
-                        if(x.equals("0")) {
-                            sucesso = this.autenticacao.registaUser(email, password);
-                            if (sucesso) {
-                                Cliente c = new Cliente(email, 0, new HashMap<>());
-                                clientes.adicionaCliente(c);
-                                out.println("Conta criada com sucesso");
-                            }
-                            else {
-                                out.println("Email já registado");
-                            }
+    public void run() {
+        try{
+            PrintWriter out = new PrintWriter(this.cs.getOutputStream(), true);
+            BufferedReader in = new BufferedReader(new InputStreamReader(this.cs.getInputStream()));
 
-                        }
-                        else if(x.equals("1")) {
-                            sucesso = this.autenticacao.verificaUser(email, password);
-                            if (sucesso) {
-                                out.println("Autenticado");
-                                autenticado = true;
-                            }
-                            else {
-                                out.println("email ou password errados");
-                            }
-                        }                        
+            //0 criar
+            //1 autenticar
+            boolean autenticado = false;
+            boolean sucesso;
+            
+            String email = "";
+            String password = "";
+            String x = "";
+
+            while(!autenticado) {
+                x = in.readLine();
+                email = in.readLine();
+                password = in.readLine();
+                System.out.println(x);
+                System.out.println(email);
+                System.out.println(password);
+                
+                //Criar conta
+                if(x.equals("0")) {
+                    sucesso = this.autenticacao.registaUser(email, password);
+                    if (sucesso) {
+                        Cliente c = new Cliente(email, 0, new HashMap<>());
+                        clientes.adicionaCliente(c);
+                        out.println("Conta criada com sucesso");
                     }
-                    boolean sair = false;
-                    while(!sair){
-                        x = in.readLine();
-                        System.out.println(x);
-                        
-                        if(x.equals("0")){
-                            String tipo = (in.readLine()).toLowerCase();
-                            new Thread(new ThreadPedido(tipo, email, out, this.registo, this.clientes)).start();
-                        }
-                        else if(x.equals("1")){
-                            String tipo = (in.readLine()).toLowerCase();
-                            float valor = Float.parseFloat(in.readLine());
-                            new Thread(new ThreadLeilao(tipo, email, valor, out, this.registo, this.clientes)).start();
-                            
-                        }
-                        else if(x.equals("2")){
-                            Cliente c = clientes.getPorEmail(email);
-                            List<String> reservas = c.listaIds();
-                            for(String s : reservas){
-                                out.println(s);
-                            }
-                            int id = Integer.parseInt(in.readLine());
-                            new Thread(new ThreadLiberta(this.registo, id, c, out)).start();
-                        }
-                        
-                        else if(x.equals("3")){
-                            new Thread(new ThreadConsulta(email, this.clientes, out)).start();
-                        }
-                        else if(x.equals("4")){
-                            out.close();
-                            sair = true;
-                        }
+                    else {
+                        out.println("Email já registado");
                     }
-		} catch (Exception e){
-                    System.out.println("Asneira");
-                    e.printStackTrace();
+
                 }
-	}
+                //Autenticar
+                else if(x.equals("1")) {
+                    sucesso = this.autenticacao.verificaUser(email, password);
+                    if (sucesso) {
+                        out.println("Autenticado");
+                        autenticado = true;
+                    }
+                    else {
+                        out.println("Email ou Password errados");
+                    }
+                }                        
+            }
+            
+            boolean sair = false;
+            
+            while(!sair){
+                x = in.readLine();
+                System.out.println(x);
+
+                //Servidor a pedido
+                if(x.equals("0")){
+                    String tipo = (in.readLine()).toLowerCase();
+                    new Thread(new ThreadPedido(tipo, email, out, this.registo, this.clientes)).start();
+                }
+                
+                //Servidor a leilão
+                else if(x.equals("1")){
+                    String tipo = (in.readLine()).toLowerCase();
+                    float valor = Float.parseFloat(in.readLine());
+                    new Thread(new ThreadLeilao(tipo, email, valor, out, this.registo, this.clientes)).start();
+                }
+                
+                //Libertar servidor
+                else if(x.equals("2")){
+                    Cliente c = clientes.getPorEmail(email);
+                    List<String> reservas = c.listaIds();
+                    for(String s : reservas){
+                        out.println(s);
+                    }
+                    int id = Integer.parseInt(in.readLine());
+                    new Thread(new ThreadLiberta(this.registo, id, c, out)).start();
+                }
+                
+                //Consultar conta
+                else if(x.equals("3")){
+                    new Thread(new ThreadConsulta(email, this.clientes, out)).start();
+                }
+                
+                //Sair
+                else if(x.equals("4")){
+                    out.close();
+                    sair = true;
+                }
+            }
+        }catch (Exception e){
+            System.out.println("Asneira");
+            e.printStackTrace();
+        }
+    }
 }
 
 class ThreadPedido implements Runnable{
@@ -129,16 +140,14 @@ class ThreadPedido implements Runnable{
     public void run() {
         int res = registo.reservaPedido(tipo, email);
         if(res == -1){
-            out.println("Erro");
+            out.println("Erro reserva pedido");
         }
         else{
             Cliente c = clientes.getPorEmail(email);
             c.adicionaReservaPedido(res, LocalDateTime.now(), tipo);
             out.println("Alocado servidor número: " + res);
         }
-        
     }
-    
 }
 
 class ThreadLeilao implements Runnable{
@@ -166,7 +175,6 @@ class ThreadLeilao implements Runnable{
         c.adicionaReservaLeilao(res, LocalDateTime.now(), tipo, valor);
         out.println("Alocado servidor número: " + res);
     }
-    
 }
 
 class ThreadLiberta implements Runnable{
@@ -189,7 +197,6 @@ class ThreadLiberta implements Runnable{
         this.cliente.cancelaReserva(id);
         out.println("Servidor libertado");
     }
-    
 }
 
 class ThreadConsulta implements Runnable{
@@ -197,7 +204,6 @@ class ThreadConsulta implements Runnable{
     private Clientes clientes;
     private PrintWriter out;
     
-
     public ThreadConsulta(String email, Clientes clientes, PrintWriter out) {
         this.email = email;
         this.out = out;
@@ -211,9 +217,7 @@ class ThreadConsulta implements Runnable{
         String formatada = String.format( "%.2f", valorDivida);
         out.println("Valor em dívida " + formatada);
     }
-    
 }
-
 
 class ThreadEspera implements Runnable{
     private int id;
@@ -239,5 +243,4 @@ class ThreadEspera implements Runnable{
         c.cancelaReserva(id);
         out.println("Reserva " + id + " de leilão libertada");
     }
-    
 }

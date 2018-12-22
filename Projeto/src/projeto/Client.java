@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.List;
 
 /**
  *
@@ -16,8 +15,8 @@ public class Client {
     
     public static void servidorPedido(PrintWriter toServer, BufferedReader keyboard) throws IOException{
         System.out.println("Escolha o tipo de servidor: ");
-        for( String s : Tipos.getTipos()) {
-             System.out.println(s);
+        for(String s : Tipos.getTipos()) {
+            System.out.println(s);
         }
         String tipo = keyboard.readLine();
         toServer.println("0");
@@ -26,10 +25,9 @@ public class Client {
     
     public static void servidorLeilao(PrintWriter toServer, BufferedReader keyboard) throws IOException{
         System.out.println("Escolha o tipo de servidor: ");
-        for( String s : Tipos.getTipos()) {
-             System.out.println(s);
+        for(String s : Tipos.getTipos()) {
+            System.out.println(s);
         }
-        
         String tipo = keyboard.readLine();
         System.out.println("Indique o valor da licitação: ");
         String valor = keyboard.readLine();
@@ -49,85 +47,85 @@ public class Client {
         toServer.println("3");
     }
     
-  
-    
     public static void main(String args[]) throws IOException, UnknownHostException{
-		Socket cs = new Socket("127.0.0.1", 9999);
+	Socket cs = new Socket("127.0.0.1", 9999);
 
-		PrintWriter toServer = new PrintWriter(cs.getOutputStream(), true);
-		BufferedReader fromServer = new BufferedReader(new InputStreamReader(cs.getInputStream()));
+	PrintWriter toServer = new PrintWriter(cs.getOutputStream(), true);
+	BufferedReader fromServer = new BufferedReader(new InputStreamReader(cs.getInputStream()));
                 
-                BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in));
-                String x = "";
+        BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in));
                 
-                boolean autenticado = false;
-                while(!autenticado) {
-                    boolean inputValido = false; 
-                    while (!inputValido) {
-                        System.out.println("\n0 -> Criar conta");
-                        System.out.println("1 -> Autenticar");
+        String x = "";
+        boolean autenticado = false;
+                
+        while(!autenticado) {
+            boolean inputValido = false; 
+            while (!inputValido) {
+                System.out.println("\n0 -> Criar conta");
+                System.out.println("1 -> Autenticar");
 
-                        x = keyboard.readLine();
-                        if(x.equals("0")) {
-                            System.out.println("\nA criar conta...");
-
-                            inputValido = true;
-                        }
-                        else if(x.equals("1")) {
-                            System.out.println("\nA autenticar...");
-                            inputValido = true;
-                        } 
-                        else {
-                            System.out.println("InputInválido");
-                        }
-                    } 
-                    toServer.println(x);
-                    System.out.println("Email");
-                    String email = keyboard.readLine();
-                    toServer.println(email);
-                    System.out.println("Password");
-                    String password = keyboard.readLine();
-                    toServer.println(password);
+                x = keyboard.readLine();
+                if(x.equals("0")) {
+                    System.out.println("\nA criar conta...");
+                    inputValido = true;
+                }
+                else if(x.equals("1")) {
+                    System.out.println("\nA autenticar...");
+                    inputValido = true;
+                } 
+                else {
+                    System.out.println("Input Inválido");
+                }
+            } 
                     
-                    String res = fromServer.readLine();
-                    System.out.println(res);
-                    if(res.equals("Autenticado")) {
-                        autenticado = true;
-                    }
-                }
+            toServer.println(x);
+                    
+            System.out.println("Email");
+            String email = keyboard.readLine();
+            toServer.println(email);
+                    
+            System.out.println("Password");
+            String password = keyboard.readLine();
+            toServer.println(password);
+                    
+            String res = fromServer.readLine();
+            System.out.println(res);
+            if(res.equals("Autenticado")) {
+                autenticado = true;
+            }
+        }
 
-                ServerToClient sc = new ServerToClient(fromServer);
-                Thread t = new Thread(sc);
-                t.start();
+        ServerToClient sc = new ServerToClient(fromServer);
+        Thread t = new Thread(sc);
+        t.start();
                 
-                //verificar condiçao while
-                boolean m = true;
-                while(m){
-                    System.out.println("\n0 -> Servidor a pedido");
-                    System.out.println("1 -> Servidor a leilão");
-                    System.out.println("2 -> Libertar servidor");
-                    System.out.println("3 -> Consultar conta");
-                    System.out.println("4 -> Sair");
+        boolean m = true;
+        while(m){
+            System.out.println("\n0 -> Servidor a pedido");
+            System.out.println("1 -> Servidor a leilão");
+            System.out.println("2 -> Libertar servidor");
+            System.out.println("3 -> Consultar conta");
+            System.out.println("4 -> Sair");
 
-                    x = keyboard.readLine();
-                    if(x.equals("0")){
-                        servidorPedido(toServer, keyboard);
-                    }
-                    else if(x.equals("1")){
-                        servidorLeilao(toServer, keyboard);
-                    }
-                    else if(x.equals("2")){
-                        libertaServidor(toServer, fromServer, keyboard);
-                    }
-                    else if(x.equals("3")){
-                        consultaDivida(toServer);
-                    }
-                    else if(x.equals("4")){
-                        toServer.println("4");
-                        m = false;
-                    }   
-                }
-	}
+            x = keyboard.readLine();
+            if(x.equals("0")){
+                servidorPedido(toServer, keyboard);
+            }
+            else if(x.equals("1")){
+                servidorLeilao(toServer, keyboard);
+            }
+            else if(x.equals("2")){
+                libertaServidor(toServer, fromServer, keyboard);
+            }
+            else if(x.equals("3")){
+                consultaDivida(toServer);
+            }
+            else if(x.equals("4")){
+                toServer.println("4");
+                m = false;
+            }   
+        }
+    }
 }
 
 class ServerToClient implements Runnable{
@@ -137,6 +135,7 @@ class ServerToClient implements Runnable{
         le = in;
     }
 
+    @Override
     public void run(){
         try{
             String message;
