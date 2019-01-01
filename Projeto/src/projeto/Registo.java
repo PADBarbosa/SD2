@@ -1,5 +1,6 @@
 package projeto;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ import java.util.Map;
  */
 public class Registo {
     int contador;
+    int numeroReserva;
     private Map<String, Servidores> servidores;
     private Servidores large;
     private Servidores medium;
@@ -17,6 +19,7 @@ public class Registo {
 
     public Registo() {
         this.contador = 1;
+        this.numeroReserva = 1;
         this.servidores = new HashMap<>();
         for( String s : Tipos.getTipos()) {
             this.servidores.put(s, new Servidores());
@@ -28,21 +31,29 @@ public class Registo {
         adicionaServidor("small");
         adicionaServidor("small");
     }
-    
+    //(int id, float taxa, LocalDateTime dataReserva, String tipo)
     public void adicionaServidor(String tipo) {
         Servidores s = this.servidores.get(tipo);
         s.adicionaServidores(this.contador, tipo, Tipos.getTaxa(tipo));
         this.contador++;
     }
     
-    public int reservaPedido(String tipo, String email){
+    public Reserva reservaPedido(String tipo, String email){       
         Servidores s = this.servidores.get(tipo);
-        return s.reservaPedido(email);
+        int id = s.reservaPedido(email);
+        LocalDateTime data = LocalDateTime.now();      
+        Reserva r = new Reserva(numeroReserva , id, Tipos.getTaxa(tipo), data, tipo);
+        numeroReserva++;
+        return r;
     }
     
-    public int reservaLeilao(String tipo, String email, float valor){
+    public Reserva reservaLeilao(String tipo, String email, float valor){
         Servidores s = this.servidores.get(tipo);
-        return s.reservaLeilao(email, valor);
+        int id = s.reservaLeilao(email, valor);
+        LocalDateTime data = LocalDateTime.now();
+        Reserva r = new Reserva(numeroReserva, id, valor, data, tipo);
+        numeroReserva++;
+        return r;
     }
     
     public void retiraServidor(String tipo, int id){      

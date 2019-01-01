@@ -8,21 +8,27 @@ import java.time.LocalDateTime;
  */
 public class Reserva {
     //id do servidor
-    int id;
+    int idReserva;
+    int idServidor;
     float taxa;
     LocalDateTime dataReserva;
     String tipo;
 
-    public Reserva(int id, float taxa, LocalDateTime dataReserva, String tipo) {
-        this.id = id;
+    public Reserva(int idReserva, int idServidor , float taxa, LocalDateTime dataReserva, String tipo) {
+        this.idReserva = idReserva;
+        this.idServidor = idServidor;
         //por hora
         this.taxa = taxa;
         this.dataReserva = dataReserva;
         this.tipo = tipo;
     }
 
-    public int getId() {
-        return id;
+    public int getIdReserva() {
+        return idReserva;
+    }
+
+    public int getIdServidor() {
+        return idServidor;
     }
 
     public float getTaxa() {

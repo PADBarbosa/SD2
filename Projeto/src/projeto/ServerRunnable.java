@@ -114,13 +114,14 @@ public class ServerRunnable implements Runnable{
                     if(reservas.isEmpty()) {
                         out.println("Não existem reservas");
                     }
-                    
+                    else {                    
                         for(String s : reservas){
                             out.println(s);
                         }
-                        int id = Integer.parseInt(in.readLine());
+                        int idReserva = Integer.parseInt(in.readLine());
                         LocalDateTime atual = LocalDateTime.now();
-                        new Thread(new ThreadLiberta(this.registo, id, c, out, atual)).start();
+                        new Thread(new ThreadLiberta(this.registo, idReserva, c, out, atual)).start();
+                    }
                 }
                 
                 //Consultar conta
@@ -159,15 +160,10 @@ class ThreadPedido implements Runnable{
         
     @Override
     public void run() {
-        int res = registo.reservaPedido(tipo, email);
-        if(res == -1){
-            out.println("Erro reserva pedido");
-        }
-        else{
-            Cliente c = clientes.getPorEmail(email);
-            c.adicionaReservaPedido(res, LocalDateTime.now(), tipo);
-            out.println("Alocado servidor número: " + res);
-        }
+        Reserva r = registo.reservaPedido(tipo, email);
+        Cliente c = clientes.getPorEmail(email);
+        c.adicionaReservaPedido(r);
+        out.println("Alocado servidor número: " + r.getIdServidor());
     }
 }
 
@@ -190,25 +186,25 @@ class ThreadLeilao implements Runnable{
         
     @Override
     public void run() {
-        int res = registo.reservaLeilao(tipo, email, valor);
+        Reserva r = registo.reservaLeilao(tipo, email, valor);
         Cliente c = clientes.getPorEmail(email);
-        (new Thread(new ThreadEspera(res, tipo, email, out, registo, c ))).start();
-        c.adicionaReservaLeilao(res, LocalDateTime.now(), tipo, valor);
-        out.println("Alocado servidor número: " + res);
+        (new Thread(new ThreadEspera(r, tipo, email, out, registo, c ))).start();
+        c.adicionaReservaLeilao(r);
+        out.println("Alocado servidor número: " + r.getIdServidor());
     }
 }
 
 class ThreadLiberta implements Runnable{
     private Registo registo;
-    private Integer id;
+    private int idReserva; //id da reserva
     private Cliente cliente;
     private PrintWriter out;
     private LocalDateTime dataPedido;
     
 
-    public ThreadLiberta(Registo registo, Integer id, Cliente cliente, PrintWriter out, LocalDateTime dataPedido) {
+    public ThreadLiberta(Registo registo, int idReserva, Cliente cliente, PrintWriter out, LocalDateTime dataPedido) {
         this.registo = registo;
-        this.id = id;
+        this.idReserva = idReserva;
         this.cliente = cliente;
         this.out = out;
         this.dataPedido = dataPedido;
@@ -216,9 +212,11 @@ class ThreadLiberta implements Runnable{
         
     @Override
     public void run() {
-        String t = this.cliente.getReserva(id).getTipo();
-        this.registo.retiraServidor(t, id);
-        this.cliente.cancelaReserva(id, dataPedido);
+        Reserva r = this.cliente.getReserva(idReserva);
+        int idServidor = r.getIdServidor();
+        String t = r.getTipo();
+        this.registo.retiraServidor(t, idServidor);
+        this.cliente.cancelaReserva(idReserva, dataPedido);
         out.println("Servidor libertado");
     }
 }
@@ -241,7 +239,7 @@ class ThreadConsulta implements Runnable{
     public void run() {
         Cliente c = clientes.getPorEmail(email);
         for(Reserva r : (c.getReservas()).values()){
-            out.println("Reserva nº " + r.getId() + " do tipo " + r.getTipo() + " alocada em " + r.getDataReserva());
+            out.println("Reserva nº " + r.getIdReserva() + " do tipo " + r.getTipo() + " alocada em " + r.getDataReserva());
         }
         float valorDivida = c.DividaAtual(dataPedido);
         String formatada = String.format( "%.2f", valorDivida);
@@ -250,15 +248,15 @@ class ThreadConsulta implements Runnable{
 }
 
 class ThreadEspera implements Runnable{
-    private int id;
+    private Reserva reserva;
     private String tipo;
     private String email;
     private PrintWriter out;
     private Registo r;
     private Cliente c;
 
-    public ThreadEspera(int id,String tipo, String email, PrintWriter out, Registo r, Cliente c) {
-        this.id = id;
+    public ThreadEspera(Reserva reserva,String tipo, String email, PrintWriter out, Registo r, Cliente c) {
+        this.reserva = reserva;
         this.tipo = tipo;
         this.email = email;
         this.out = out;
@@ -269,9 +267,9 @@ class ThreadEspera implements Runnable{
     @Override
     public void run() {
         System.out.println("run com sucesso");
-        this.r.esperaPerderLeilao(tipo, id, email);
+        this.r.esperaPerderLeilao(tipo, reserva.getIdServidor(), email);
         LocalDateTime atual = LocalDateTime.now();
-        c.cancelaReserva(id, atual);
-        out.println("Reserva " + id + " de leilão libertada");
+        c.cancelaReserva(reserva.getIdReserva(), atual);
+        out.println("Reserva " + reserva.getIdReserva() + " de leilão libertada");
     }
 }

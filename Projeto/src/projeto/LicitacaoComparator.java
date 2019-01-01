@@ -10,7 +10,14 @@ public class LicitacaoComparator implements Comparator<Licitacao>{
     
     
     public int compare(Licitacao l1, Licitacao l2) {
-        return Float.compare(l1.getValor(), l2.getValor());
+        int valorCompare = Float.compare(l1.getValor(), l2.getValor());
+        if ( valorCompare == 1) {
+            return -1;
+        }
+        else if (Float.compare(l1.getValor(), l2.getValor()) == -1) {
+            return 1;
+        }
+        else return 0;
     }
 }
     

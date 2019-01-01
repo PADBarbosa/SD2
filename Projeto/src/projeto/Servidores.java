@@ -81,9 +81,11 @@ public class Servidores {
         l.lock();
         Servidor s;
         int i = this.nLicitacao; // é preciso?
+        this.nLicitacao++;
         try{
             Licitacao l = new Licitacao(valor, i);
             this.licitacoes.add(l);
+            this.licitacoes.sort(new LicitacaoComparator());
             while(this.vazios.isEmpty() || (i != this.licitacoes.get(0).getId())){
                 c.await();
             }

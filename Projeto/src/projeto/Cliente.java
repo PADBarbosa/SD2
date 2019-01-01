@@ -48,15 +48,12 @@ public class Cliente{
         this.reservas = reservas;
     }
     
-    public synchronized void adicionaReservaPedido(int id, LocalDateTime dataReserva, String tipo){
-        float taxa = Tipos.getTaxa(tipo);
-        Reserva r = new Reserva(id, taxa, dataReserva, tipo);
-        this.reservas.put(id, r);
+    public synchronized void adicionaReservaPedido(Reserva r){
+        this.reservas.put(r.getIdReserva(), r);
     }
     
-    public synchronized void adicionaReservaLeilao(int id, LocalDateTime dataReserva, String tipo, float taxa){
-        Reserva r = new Reserva(id, taxa, dataReserva, tipo);
-        this.reservas.put(id, r);
+    public synchronized void adicionaReservaLeilao(Reserva r){
+        this.reservas.put(r.getIdReserva(), r);
     }
     
     //dataCancelamento -> data em que foi recebido o pedido de cancelamento
@@ -73,7 +70,7 @@ public class Cliente{
     public synchronized List<String> listaIds(){
         List<String> res = new ArrayList<>();
         for(Reserva r : reservas.values()){
-            res.add(r.getId() + " " + r.getTipo());
+            res.add(r.getIdReserva() + " " + r.getTipo());
         }
         return res;
     }
