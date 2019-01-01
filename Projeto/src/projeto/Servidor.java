@@ -46,8 +46,6 @@ public class Servidor {
     public LocalDateTime getDataInicio() {
         return dataInicio;
     }
-
-    
     
     public void setId(int id) {
         this.id = id;
@@ -69,15 +67,14 @@ public class Servidor {
         this.cliente = cliente;
     }
     
-   public void reserva(String nome) {
-       this.setCliente(nome);
-       this.setOcupado(true);
-       this.dataInicio = LocalDateTime.now();
-   }
+    public synchronized void reserva(String email) {
+        this.setCliente(email);
+        this.setOcupado(true);
+        this.dataInicio = LocalDateTime.now();
+    }
    
-   public void liberta() {
-       this.cliente = "";
-       this.ocupado = false;
-       
-   }
+    public synchronized void liberta() {
+        this.cliente = "";
+        this.ocupado = false;
+    }
 }

@@ -12,13 +12,13 @@ import java.util.Map;
  */
 
 //Adicionar sincronização?
-public class Cliente {
+public class Cliente{
     String email;
     String password;
     float valorDivida;
     Map<Integer, Reserva> reservas;
 
-    public Cliente(String email, float valorDivida, Map<Integer, Reserva> reservas) {
+    public Cliente(String email, float valorDivida, Map<Integer, Reserva> reservas){
         this.email = email;
         this.valorDivida = valorDivida;
         this.reservas = reservas;
@@ -48,18 +48,19 @@ public class Cliente {
         this.reservas = reservas;
     }
     
-    public void adicionaReservaPedido(int id, LocalDateTime dataReserva, String tipo){
+    public synchronized void adicionaReservaPedido(int id, LocalDateTime dataReserva, String tipo){
         float taxa = Tipos.getTaxa(tipo);
         Reserva r = new Reserva(id, taxa, dataReserva, tipo);
         this.reservas.put(id, r);
     }
     
-    public void adicionaReservaLeilao(int id, LocalDateTime dataReserva, String tipo, float taxa){
+    public synchronized void adicionaReservaLeilao(int id, LocalDateTime dataReserva, String tipo, float taxa){
         Reserva r = new Reserva(id, taxa, dataReserva, tipo);
         this.reservas.put(id, r);
     }
+    
     //dataCancelamento -> data em que foi recebido o pedido de cancelamento
-    public float DividaAtual(LocalDateTime dataCancelamento){
+    public synchronized float DividaAtual(LocalDateTime dataCancelamento){
         float valor = this.valorDivida;
         for(Reserva r : reservas.values()) {
             LocalDateTime inicio = r.getDataReserva();
@@ -69,7 +70,7 @@ public class Cliente {
         return valor;
     }
     
-    public List<String> listaIds(){
+    public synchronized List<String> listaIds(){
         List<String> res = new ArrayList<>();
         for(Reserva r : reservas.values()){
             res.add(r.getId() + " " + r.getTipo());
@@ -77,21 +78,21 @@ public class Cliente {
         return res;
     }
     //dataCancelamento -> data em que foi recebido o pedido de cancelamento
-   public void cancelaReserva(int id, LocalDateTime dataCancelamento) {
-       Reserva r = this.reservas.get(id); 
-       LocalDateTime inicio = r.getDataReserva();
-       float taxa = r.getTaxa();
-       valorDivida += calculaValorIntervalo(inicio, dataCancelamento, taxa);
-       this.reservas.remove(id);
-   }
+    public synchronized void cancelaReserva(int id, LocalDateTime dataCancelamento) {
+        Reserva r = this.reservas.get(id); 
+        LocalDateTime inicio = r.getDataReserva();
+        float taxa = r.getTaxa();
+        valorDivida += calculaValorIntervalo(inicio, dataCancelamento, taxa);
+        this.reservas.remove(id);
+    }
    
-   public float calculaValorIntervalo(LocalDateTime inicio, LocalDateTime fim, float taxa) {
+    public float calculaValorIntervalo(LocalDateTime inicio, LocalDateTime fim, float taxa) {
         Duration duracao = Duration.between(inicio, fim);
         long segundos = duracao.getSeconds();
         return (segundos * (taxa /3600));
-   }
+    }
    
-   public Reserva getReserva(int id) {
-       return this.reservas.get(id);
-   }
+    public Reserva getReserva(int id) {
+        return this.reservas.get(id);
+    }
 }
