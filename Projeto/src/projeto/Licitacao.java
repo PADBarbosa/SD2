@@ -2,6 +2,8 @@ package projeto;
 
 /**
  *
+ * Classe que representa uma licitação.
+ * 
  * @author José Pinto (A81317); Luís Correia (A81141); Pedro Barbosa (A82068)
  */
 public class Licitacao {
