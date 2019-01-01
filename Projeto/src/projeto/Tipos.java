@@ -5,6 +5,8 @@ import java.util.List;
 
 /**
  *
+ * Classe que contém os diferentes tipos e preços dos servidores.
+ * 
  * @author José Pinto (A81317); Luís Correia (A81141); Pedro Barbosa (A82068)
  */
 public final class Tipos {

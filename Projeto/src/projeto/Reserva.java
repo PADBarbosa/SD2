@@ -4,10 +4,11 @@ import java.time.LocalDateTime;
 
 /**
  *
+ * Classe que contém toda a informação referente às reservas efetuadas.
+ * 
  * @author José Pinto (A81317); Luís Correia (A81141); Pedro Barbosa (A82068)
  */
 public class Reserva {
-    //id do servidor
     int idReserva;
     int idServidor;
     float taxa;

@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 /**
  *
+ * Classe que contém toda a informação referente a um servidor.
+ * 
  * @author José Pinto (A81317); Luís Correia (A81141); Pedro Barbosa (A82068)
  */
 public class Servidor {
@@ -67,12 +69,19 @@ public class Servidor {
         this.cliente = cliente;
     }
     
+    /**
+     * Função que define o servidor como ocupado por um certo cliente.
+     * @param email 
+     */
     public synchronized void reserva(String email) {
         this.setCliente(email);
         this.setOcupado(true);
         this.dataInicio = LocalDateTime.now();
     }
    
+    /**
+     * Função que liberta o servidor.
+     */
     public synchronized void liberta() {
         this.cliente = "";
         this.ocupado = false;

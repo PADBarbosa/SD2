@@ -10,6 +10,8 @@ import java.util.List;
 
 /**
  *
+ * Classe correspondente à thread que vai lidar com os pedidos do cliente.
+ * 
  * @author José Pinto (A81317); Luís Correia (A81141); Pedro Barbosa (A82068)
  */
 public class ServerRunnable implements Runnable{
@@ -30,8 +32,6 @@ public class ServerRunnable implements Runnable{
             PrintWriter out = new PrintWriter(this.cs.getOutputStream(), true);
             BufferedReader in = new BufferedReader(new InputStreamReader(this.cs.getInputStream()));
 
-            //0 criar
-            //1 autenticar
             boolean autenticado = false;
             boolean sucesso;
             
@@ -47,7 +47,7 @@ public class ServerRunnable implements Runnable{
                 System.out.println(email);
                 System.out.println(password);
                 
-                //Criar conta
+                // Criar conta
                 if(x.equals("0")) {
                     sucesso = this.autenticacao.registaUser(email, password);
                     if (sucesso) {
@@ -60,7 +60,7 @@ public class ServerRunnable implements Runnable{
                     }
 
                 }
-                //Autenticar
+                // Autenticar
                 else if(x.equals("1")) {
                     sucesso = this.autenticacao.verificaUser(email, password);
                     if (sucesso) {
@@ -79,7 +79,7 @@ public class ServerRunnable implements Runnable{
                 x = in.readLine();
                 System.out.println(x);
 
-                //Servidor a pedido
+                // Reservar um servidor a pedido
                 if(x.equals("0")){
                     String tipo = (in.readLine()).toLowerCase();
                     if (!Tipos.contains(tipo)) {
@@ -90,7 +90,7 @@ public class ServerRunnable implements Runnable{
                     }
                 }
                 
-                //Servidor a leilão
+                // Rservar um servidor a leilão
                 else if(x.equals("1")){
                     String tipo = (in.readLine()).toLowerCase();
                     if (!Tipos.contains(tipo)) {
@@ -107,7 +107,7 @@ public class ServerRunnable implements Runnable{
                     }
                 }
                 
-                //Libertar servidor
+                // Libertar um servidor
                 else if(x.equals("2")){
                     Cliente c = clientes.getPorEmail(email);
                     List<String> reservas = c.listaIds();
@@ -124,13 +124,13 @@ public class ServerRunnable implements Runnable{
                     }
                 }
                 
-                //Consultar conta
+                // Consultar conta
                 else if(x.equals("3")){
                     LocalDateTime atual = LocalDateTime.now();
                     new Thread(new ThreadConsulta(email, this.clientes, out, atual)).start();
                 }
                 
-                //Sair
+                // Sair
                 else if(x.equals("4")){
                     out.close();
                     sair = true;
@@ -143,6 +143,12 @@ public class ServerRunnable implements Runnable{
     }
 }
 
+/**
+ *
+ * Thread criada quando o cliente pretende reservar um servidor a pedido.
+ * 
+ * @author José Pinto (A81317); Luís Correia (A81141); Pedro Barbosa (A82068)
+ */
 class ThreadPedido implements Runnable{
     private String tipo;
     private String email;
@@ -167,6 +173,12 @@ class ThreadPedido implements Runnable{
     }
 }
 
+/**
+ *
+ * Thread criada quando o cliente pretende reservar um servidor a leilão.
+ * 
+ * @author José Pinto (A81317); Luís Correia (A81141); Pedro Barbosa (A82068)
+ */
 class ThreadLeilao implements Runnable{
     private String tipo;
     private String email;
@@ -194,6 +206,12 @@ class ThreadLeilao implements Runnable{
     }
 }
 
+/**
+ *
+ * Thread criada quando o cliente pretende libertar um dos servidores que reservou anteriormente.
+ * 
+ * @author José Pinto (A81317); Luís Correia (A81141); Pedro Barbosa (A82068)
+ */
 class ThreadLiberta implements Runnable{
     private Registo registo;
     private int idReserva; //id da reserva
@@ -221,6 +239,12 @@ class ThreadLiberta implements Runnable{
     }
 }
 
+/**
+ *
+ * Thread criada quando o cliente pretende consultar o valor a pagar até ao momento do pedido.
+ * 
+ * @author José Pinto (A81317); Luís Correia (A81141); Pedro Barbosa (A82068)
+ */
 class ThreadConsulta implements Runnable{
     private String email;
     private Clientes clientes;
@@ -247,6 +271,12 @@ class ThreadConsulta implements Runnable{
     }
 }
 
+/**
+ *
+ * Thread criada para aguardar uma resposta quando não é possivel reservar um servidor ou quando é reservado um servidor a leilão.
+ * 
+ * @author José Pinto (A81317); Luís Correia (A81141); Pedro Barbosa (A82068)
+ */
 class ThreadEspera implements Runnable{
     private Reserva reserva;
     private String tipo;
