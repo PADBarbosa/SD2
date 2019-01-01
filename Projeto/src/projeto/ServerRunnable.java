@@ -82,18 +82,28 @@ public class ServerRunnable implements Runnable{
                 //Servidor a pedido
                 if(x.equals("0")){
                     String tipo = (in.readLine()).toLowerCase();
-                    new Thread(new ThreadPedido(tipo, email, out, this.registo, this.clientes)).start();
+                    if (!Tipos.contains(tipo)) {
+                        out.println("Tipo " + tipo + " não existe");
+                    }
+                    else {
+                        new Thread(new ThreadPedido(tipo, email, out, this.registo, this.clientes)).start();
+                    }
                 }
                 
                 //Servidor a leilão
                 else if(x.equals("1")){
                     String tipo = (in.readLine()).toLowerCase();
-                    float valor = Float.parseFloat(in.readLine());
-                    if (valor > 0) {
-                        new Thread(new ThreadLeilao(tipo, email, valor, out, this.registo, this.clientes)).start();
+                    if (!Tipos.contains(tipo)) {
+                        out.println("Tipo " + tipo + " não existe");
                     }
                     else {
-                         out.println("Licitação tem que ser superior a 0");
+                        float valor = Float.parseFloat(in.readLine());
+                        if (valor > 0) {
+                            new Thread(new ThreadLeilao(tipo, email, valor, out, this.registo, this.clientes)).start();
+                        }
+                        else {
+                             out.println("Licitação tem que ser superior a 0");
+                        }
                     }
                 }
                 
@@ -101,12 +111,16 @@ public class ServerRunnable implements Runnable{
                 else if(x.equals("2")){
                     Cliente c = clientes.getPorEmail(email);
                     List<String> reservas = c.listaIds();
-                    for(String s : reservas){
-                        out.println(s);
+                    if(reservas.isEmpty()) {
+                        out.println("Não existem reservas");
                     }
-                    int id = Integer.parseInt(in.readLine());
-                    LocalDateTime atual = LocalDateTime.now();
-                    new Thread(new ThreadLiberta(this.registo, id, c, out, atual)).start();
+                    
+                        for(String s : reservas){
+                            out.println(s);
+                        }
+                        int id = Integer.parseInt(in.readLine());
+                        LocalDateTime atual = LocalDateTime.now();
+                        new Thread(new ThreadLiberta(this.registo, id, c, out, atual)).start();
                 }
                 
                 //Consultar conta
@@ -226,6 +240,9 @@ class ThreadConsulta implements Runnable{
     @Override
     public void run() {
         Cliente c = clientes.getPorEmail(email);
+        for(Reserva r : (c.getReservas()).values()){
+            out.println("Reserva nº " + r.getId() + " do tipo " + r.getTipo() + " alocada em " + r.getDataReserva());
+        }
         float valorDivida = c.DividaAtual(dataPedido);
         String formatada = String.format( "%.2f", valorDivida);
         out.println("Valor em dívida " + formatada);

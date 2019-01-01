@@ -36,6 +36,11 @@ public final class Tipos {
     public static List<String> getTipos() {
         return st;                        //clone?
     }
+    
+    public static boolean contains(String tipo) {
+        System.out.println(st.contains(tipo) + tipo);
+        return st.contains(tipo);
+    }
 }
    
 class Tipo {

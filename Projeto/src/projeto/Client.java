@@ -22,7 +22,7 @@ public class Client {
         toServer.println("0");
         toServer.println(tipo);
     }
-    
+       
     public static void servidorLeilao(PrintWriter toServer, BufferedReader keyboard) throws IOException{
         System.out.println("Escolha o tipo de servidor: ");
         for(String s : Tipos.getTipos()) {
