@@ -43,20 +43,4 @@ public class Reserva {
     public String getTipo() {
         return tipo;
     }
-/*
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setTaxa(float taxa) {
-        this.taxa = taxa;
-    }
-
-    public void setDataReserva(LocalDateTime dataReserva) {
-        this.dataReserva = dataReserva;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }*/
 }

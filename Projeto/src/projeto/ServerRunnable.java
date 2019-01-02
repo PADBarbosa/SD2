@@ -1,6 +1,7 @@
 package projeto;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -27,6 +28,7 @@ public class ServerRunnable implements Runnable{
         this.clientes = clientes;
     }
 
+    @Override
     public void run() {
         try{
             PrintWriter out = new PrintWriter(this.cs.getOutputStream(), true);
@@ -112,15 +114,24 @@ public class ServerRunnable implements Runnable{
                     Cliente c = clientes.getPorEmail(email);
                     List<String> reservas = c.listaIds();
                     if(reservas.isEmpty()) {
-                        out.println("Não existem reservas");
+                        out.println("Não existem reservas (introduza 'r' para retroceder)");
                     }
                     else {                    
                         for(String s : reservas){
                             out.println(s);
                         }
-                        int idReserva = Integer.parseInt(in.readLine());
-                        LocalDateTime atual = LocalDateTime.now();
-                        new Thread(new ThreadLiberta(this.registo, idReserva, c, out, atual)).start();
+                        try{
+                            int idReserva = Integer.parseInt(in.readLine());
+                            if(c.containsReserva(idReserva)){
+                                LocalDateTime atual = LocalDateTime.now();
+                                new Thread(new ThreadLiberta(this.registo, idReserva, c, out, atual)).start();
+                            }
+                            else{
+                                out.println("Reserva com esse ID não existe");
+                            }
+                        }catch(IOException | NumberFormatException e){
+                            out.println("Número não válido");
+                        }
                     }
                 }
                 

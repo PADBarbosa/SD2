@@ -27,6 +27,7 @@ public class Autenticacao {
      * desde que não exista nenhum utilizador com o email indicado.
      * @param email
      * @param password
+     * @return boolean true se conseguiu registar
      */
     public synchronized boolean registaUser(String email, String password){
         if(users.containsKey(email)){
@@ -41,6 +42,7 @@ public class Autenticacao {
      * parte dos utilizadores registados.
      * @param email
      * @param password
+     * @return true caso se verifique
      */
     public synchronized boolean verificaUser(String email, String password){
         if(this.users.containsKey(email)){

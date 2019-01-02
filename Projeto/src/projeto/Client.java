@@ -143,9 +143,11 @@ class ServerToClient implements Runnable{
                 System.out.println(message);
             }
             le.close();
-        }catch(Exception e){
+        }catch(IOException e){
             System.out.println("Erro cliente");
             e.printStackTrace();
+        }catch(Exception ex){
+            ex.printStackTrace();
         }
     }
 }

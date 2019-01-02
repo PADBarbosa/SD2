@@ -10,8 +10,6 @@ import java.net.ServerSocket;
  */
 public class Server {
     
-    
-    
     public static void main(String args[]) throws IOException{
                 Autenticacao autenticacao = new Autenticacao();
 		ServerSocket ss = new ServerSocket(9999);

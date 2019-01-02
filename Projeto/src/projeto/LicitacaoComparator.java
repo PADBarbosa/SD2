@@ -9,6 +9,7 @@ import java.util.Comparator;
 public class LicitacaoComparator implements Comparator<Licitacao>{
     
     
+    @Override
     public int compare(Licitacao l1, Licitacao l2) {
         int valorCompare = Float.compare(l1.getValor(), l2.getValor());
         if ( valorCompare == 1) {

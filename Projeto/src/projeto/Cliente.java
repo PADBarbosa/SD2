@@ -101,11 +101,13 @@ public class Cliente{
      * @param dataCancelamento 
      */
     public synchronized void cancelaReserva(int id, LocalDateTime dataCancelamento) {
-        Reserva r = this.reservas.get(id); 
-        LocalDateTime inicio = r.getDataReserva();
-        float taxa = r.getTaxa();
-        valorDivida += calculaValorIntervalo(inicio, dataCancelamento, taxa);
-        this.reservas.remove(id);
+        if(containsReserva(id)){
+            Reserva r = this.reservas.get(id); 
+            LocalDateTime inicio = r.getDataReserva();
+            float taxa = r.getTaxa();
+            valorDivida += calculaValorIntervalo(inicio, dataCancelamento, taxa);
+            this.reservas.remove(id);
+        }
     }
 
     /**
@@ -128,5 +130,9 @@ public class Cliente{
      */
     public Reserva getReserva(int id) {
         return this.reservas.get(id);
+    }
+    
+    public boolean containsReserva(int id){
+        return this.reservas.containsKey(id);
     }
 }

@@ -18,7 +18,7 @@ import java.util.logging.Logger;
  */
 
 public class Servidores {
-    private Lock l = new ReentrantLock();
+    private final Lock l = new ReentrantLock();
     Condition c = l.newCondition();
     
     // Para a thread que vai esperar pela perda do leilão. 
@@ -38,8 +38,6 @@ public class Servidores {
     
     /** Nome dos clientes à espera de leilão. */
     private ArrayList<Licitacao> licitacoes;
-    
-    private int melhorLicitacao;
     
     /** Contador. */
     private int nLicitacao;
@@ -101,8 +99,8 @@ public class Servidores {
         int i = this.nLicitacao;
         this.nLicitacao++;
         try{
-            Licitacao l = new Licitacao(valor, i);
-            this.licitacoes.add(l);
+            Licitacao li = new Licitacao(valor, i);
+            this.licitacoes.add(li);
             // A thread adormece caso não haja servidores livres ou não seja a melhor licitação
             while(this.vazios.isEmpty() || (i != this.licitacoes.get(0).getId())){
                 c.await();
@@ -164,7 +162,7 @@ public class Servidores {
         this.l.lock();
         
         try {
-            while(this.leilao.contains(Integer.valueOf(id)) && this.servidores.get(id).getCliente().equals(email)) {
+            while(this.leilao.contains(id) && this.servidores.get(id).getCliente().equals(email)) {
                 System.out.println("adormeceu");
                 cl.await();
                 System.out.println("acordou");
