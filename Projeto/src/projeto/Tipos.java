@@ -40,7 +40,6 @@ public final class Tipos {
     }
     
     public static boolean contains(String tipo) {
-        System.out.println(st.contains(tipo) + tipo);
         return st.contains(tipo);
     }
 }

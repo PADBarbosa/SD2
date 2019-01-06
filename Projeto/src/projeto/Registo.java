@@ -90,7 +90,6 @@ public class Registo {
      */
     public void esperaPerderLeilao(String tipo, int id, String email) {
         Servidores s = this.servidores.get(tipo);
-        System.out.println("entrou no registo");
         s.esperaPerderLeilao(id,email);
     }
     
