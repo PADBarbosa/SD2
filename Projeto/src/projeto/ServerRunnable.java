@@ -45,9 +45,6 @@ public class ServerRunnable implements Runnable{
                 x = in.readLine();
                 email = in.readLine();
                 password = in.readLine();
-                System.out.println(x);
-                System.out.println(email);
-                System.out.println(password);
                 
                 // Criar conta
                 if(x.equals("0")) {
@@ -79,7 +76,6 @@ public class ServerRunnable implements Runnable{
             
             while(!sair){
                 x = in.readLine();
-                System.out.println(x);
 
                 // Reservar um servidor a pedido
                 if(x.equals("0")){
@@ -148,7 +144,6 @@ public class ServerRunnable implements Runnable{
                 }
             }
         }catch (Exception e){
-            System.out.println("Asneira");
             e.printStackTrace();
         }
     }
@@ -307,7 +302,6 @@ class ThreadEspera implements Runnable{
     
     @Override
     public void run() {
-        System.out.println("run com sucesso");
         this.r.esperaPerderLeilao(tipo, reserva.getIdServidor(), email);
         LocalDateTime atual = LocalDateTime.now();
         c.cancelaReserva(reserva.getIdReserva(), atual);
