@@ -15,9 +15,6 @@ public class Registo {
     private int contador;
     private int numeroReserva;
     private Map<String, Servidores> servidores;
-    private Servidores large;
-    private Servidores medium;
-    private Servidores small;
 
     public Registo() {
         this.contador = 1;

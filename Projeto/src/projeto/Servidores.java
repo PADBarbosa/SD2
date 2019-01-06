@@ -22,23 +22,15 @@ public class Servidores {
     Condition c = l.newCondition();
     
     // Para a thread que vai esperar pela perda do leilão. 
-    // private Lock ll = new ReentrantLock();
     Condition cl = l.newCondition();
-    
-    // chave-> id do servidor
-    // guarda todos os servidores
     /** O map de servidores usa como chave o ID do servidor e nos valores guarda os servidores. */
     private Map<Integer,Servidor> servidores;
-
     /** IDs dos servidores obtidos por leilão. */
     private List<Integer> leilao;
-    
     /** IDs dos servidores vazios. */
     private List<Integer> vazios;
-    
     /** Nome dos clientes à espera de leilão. */
     private ArrayList<Licitacao> licitacoes;
-    
     /** Contador. */
     private int nLicitacao;
 
@@ -122,12 +114,12 @@ public class Servidores {
     }
     
     /**
-     * Funçção que adiciona um servidor.
+     * Função que adiciona um servidor.
      * @param id
      * @param tipo
      * @param custoHorario 
      */
-    public void adicionaServidores(int id, String tipo, Float custoHorario){
+    public synchronized void adicionaServidores(int id, String tipo, Float custoHorario){
         Servidor s = new Servidor(id, tipo, custoHorario);
         this.servidores.put(id, s);
         this.vazios.add(id);
@@ -158,23 +150,17 @@ public class Servidores {
      * @param email 
      */
     public void esperaPerderLeilao(int id, String email) {
-        System.out.println("começou");
         this.l.lock();
         
         try {
             while(this.leilao.contains(id) && this.servidores.get(id).getCliente().equals(email)) {
-                System.out.println("adormeceu");
                 cl.await();
-                System.out.println("acordou");
             }
-        }
-        catch (InterruptedException ex) {
+        }catch (InterruptedException ex) {
             Logger.getLogger(Servidores.class.getName()).log(Level.SEVERE, null, ex);
-        }        finally {
-            System.out.println("saiu");
+        }finally {
             this.l.unlock();
-        }
-        
+        }   
     }
 }
 
