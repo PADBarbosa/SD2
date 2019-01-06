@@ -14,7 +14,6 @@ import java.util.Map;
  */
 public class Cliente{
     String email;
-    String password;
     float valorDivida;
     /** O map guarda nas keys o ID da reserva e no valor a reserva corresponde a esse ID */
     Map<Integer, Reserva> reservas;
@@ -88,7 +87,7 @@ public class Cliente{
     public synchronized List<String> listaIds(){
         List<String> res = new ArrayList<>();
         for(Reserva r : reservas.values()){
-            res.add(r.getIdReserva() + " " + r.getTipo());
+            res.add(r.getIdReserva() + " " + r.getTipo() + "    Reservado em: " + r.getDataReserva() + " Com taxa: " + r.getTaxa());
         }
         return res;
     }
